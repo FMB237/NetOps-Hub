@@ -39,3 +39,5 @@ This project will mainly to be develop in 7 Sprint :
 python3 -m venv .venv (Installation)
 Source .venv/bin/activate (Activation)
 
+**Portgres Set up using Docker in Local**
+For  this project since i have Some portgres containers in my machine i will simply set up a simple  external db so that will not have problems in deployment.
