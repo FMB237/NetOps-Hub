@@ -34,3 +34,8 @@ This project will mainly to be develop in 7 Sprint :
 **Sprint 7**
 - Kubernetes deployment and Terrafrom(Task4)
 ---
+
+**Packet Installation and activation**
+python3 -m venv .venv (Installation)
+Source .venv/bin/activate (Activation)
+
