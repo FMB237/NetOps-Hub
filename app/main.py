@@ -1,14 +1,11 @@
 from fastapi import FastAPI
 
-app = FastAPI()
+from app.database.base import Base
+from app.database.database import engine
 
+# Import all models
+import app.models
 
-@app.get("/")
-def home():
-    return{
-        "Hello Bro"
-    }
+Base.metadata.create_all(bind=engine)
 
-@app.get('/Contact')
-def Contact():
-    return{"Welcome to the contact page "}
+app = FastAPI(title="NetOps Hub")
