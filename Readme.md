@@ -87,3 +87,8 @@ Let fill our enums.py Where we gonna defined our network architectecture
 6. Move to the main.py file and launch the DB
 7. To solve the error path i create  a simple run.sh (script) for running the app using the absolute path 
 8. But this is not good if we are in production so we will go back the the NetOps-Hub folder and used the command **uvicorn app.main:app --reload** to run our code.
+   
+**Moving up to Sprint3 Pydantic Schema**
+1. Let move on to the folder call schemas and let defined our application main schemas that will fit with models and database structure
+2. For that we will created a simple python file call device.py
+3. 
