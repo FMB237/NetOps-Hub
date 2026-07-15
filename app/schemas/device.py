@@ -1,13 +1,13 @@
 # Here we gonna defined our app db and models schema using pydantic
 
-from pydantic import BaseModel,Field
-from app.models.enums import Devicetype,Vendor
-
-
 # Now let set up the devices responses
 from uuid import UUID
 from datetime import datetime
-from pydantic import ConfigDict
+
+
+from pydantic import BaseModel,Field,ConfigDict,IPv4Address
+from app.models.enums import Devicetype,Vendor
+
 
 # Let define the device base according to the device models
 class DeviceBase(BaseModel):

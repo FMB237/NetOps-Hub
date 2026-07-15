@@ -91,4 +91,23 @@ Let fill our enums.py Where we gonna defined our network architectecture
 **Moving up to Sprint3 Pydantic Schema**
 1. Let move on to the folder call schemas and let defined our application main schemas that will fit with models and database structure
 2. For that we will created a simple python file call device.py
-3. 
+
+Now let move on to the repositories that is mainly inside the repository folder to define our project repository.
+**Why use a Repository?**
+
+Without a repository:
+API
+ │
+ ▼
+SQLAlchemy
+
+With a repository:
+
+This keeps responsibilities separate:
+
+- API → Handles HTTP requests.
+ - Service → Business logic.
+ - Repository → Database operations.
+
+1. Since we had already created the repository folder then with will just move up to it and create a file call device_repository.py 
+2. 
