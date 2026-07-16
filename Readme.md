@@ -114,3 +114,6 @@ This keeps responsibilities separate:
 **Let Move on and create the services of our app that is mainly our devices various services.**
 For that move on to the services folder and create the file device_service.py 
 
+
+**Building the RESTAPI**
+So let move on the to api Folder.Then we gonna create an __init__.py file 
