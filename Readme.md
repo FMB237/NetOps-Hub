@@ -110,4 +110,7 @@ This keeps responsibilities separate:
  - Repository → Database operations.
 
 1. Since we had already created the repository folder then with will just move up to it and create a file call device_repository.py 
-2. 
+
+**Let Move on and create the services of our app that is mainly our devices various services.**
+For that move on to the services folder and create the file device_service.py 
+

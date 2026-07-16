@@ -19,7 +19,7 @@ from app.models.enums import Devicetype
 from app.models.enums import Vendor
 
 
-class Devicetype(Base):
+class Device(Base):
     __tablename__ = "devices"
 
     id : Mapped[uuid.UUID]= mapped_column(
