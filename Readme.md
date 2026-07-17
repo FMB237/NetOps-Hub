@@ -118,3 +118,7 @@ For that move on to the services folder and create the file device_service.py
 **Building the RESTAPI**
 So let move on the to api Folder.Then we gonna create an __init__.py file 
 After building our RestAPI let move on and test our API only using the Fastapi docs on the link [text](http://localhost:8000/docs)
+
+
+Now we are done with the doing of the backend Let move to the Frontend Using (HTML,CSS,Js,BootStrap and Jinja2Templates)
+- We need to install Jinja2 then  start Buidling Our Frontend Move on to the static file 
