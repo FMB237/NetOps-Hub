@@ -9,11 +9,11 @@ from app.api.device_router import router as device_router
 # Import all models
 import app.models
 
+app = FastAPI(title="NetOps Hub")
+
 app.include_router(device_router)
 
 Base.metadata.create_all(bind=engine)
-
-app = FastAPI(title="NetOps Hub")
 
 
 @app.get("/")

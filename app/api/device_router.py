@@ -22,8 +22,7 @@ router = APIRouter(
 
 # Let start adding our app 
 @router.post("/",response_model=DeviceResponse,status_code=201)
-def create_device(device:DeviceCreate):
-    db : Session = Depends(get_db)
+def create_device(device:DeviceCreate, db: Session = Depends(get_db)):
 
     try :    
         return device_service.create_device(db,device)
@@ -61,7 +60,7 @@ def update_device(device_id: UUID,device: DeviceUpdate, db: Session = Depends(ge
 
 
 @router.delete('/{device_id}',status_code=204)
-def delete_device(device_id:UUID,db:Session):
+def delete_device(device_id:UUID, db: Session = Depends(get_db)):
     try:
         device_service.delete_device(db,device_id)
     except ValueError as e:

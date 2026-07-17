@@ -37,7 +37,7 @@ class DeviceUpdate(BaseModel):
     ip_address: str | None = None
     vendor: Vendor | None = None
     model: str | None = None
-    device_type: DeviceType | None = None
+    device_type: Devicetype | None = None
     operating_system: str | None = None
     ssh_port: int | None = None
     username: str | None = None
