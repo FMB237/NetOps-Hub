@@ -1,0 +1,44 @@
+# This is the device_service file 
+from uuid import UUID
+
+from sqlalchemy.orm import Session
+
+from app.models.device import Device
+from app.repositories.device_repository import device_repository
+from app.schemas.device import DeviceCreate,DeviceUpdate
+
+class DeviceService:
+    """Business logic for Network devices"""
+
+    def create_device(self,db:Session,device:DeviceCreate) -> Device : # Function to create a define and verifed that a hostname machine is already present
+        existing = device_repository.get_by_hostname(db,device.hostname)
+        if existing:
+            raise ValueError("A device with this hostname alrasy exist")
+
+        return device_repository.create(db,device)
+
+    def get_devices(self,db:Session):
+        return device_repository.get_all(db)   # Function to get the devices    
+
+       
+    def get_services(self,db:Session,device_id:UUID):
+        device = device_repository.get_by_id(db,device_id)
+
+        if not device:
+            raise ValueError('Device not found')
+
+            return device
+
+    def update_device(self,db:Session,device_id:UUID,update:DeviceUpdate):
+        device = self.get_devices(db,device_id)
+
+        return device_repository.update(db,device,update)
+
+    def delete_device(self ,db:Session, device_id:UUID,):
+        device = self.get_devices(db,device_id)
+
+        return device_repository.delete(db,device,update)                  
+
+
+device_service= DeviceService()
+        

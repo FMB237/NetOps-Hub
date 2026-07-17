@@ -5,22 +5,25 @@ from uuid import UUID
 from datetime import datetime
 
 
-from pydantic import BaseModel,Field,ConfigDict,IPv4Address
+from pydantic import BaseModel,Field,ConfigDict,IPvAnyAddress
 from app.models.enums import Devicetype,Vendor
 
 
 # Let define the device base according to the device models
+from pydantic import BaseModel, Field
+from app.models.enums import Devicetype, Vendor
+
 class DeviceBase(BaseModel):
-    hostname: str=Field(...,max_length=100)
+    hostname: str = Field(..., max_length=100)
     ip_address: str
-    vendor:Vendor
-    model : str=Field(...,max_length=100)
-    devicetype:Devicetype
-    operating_system= str=Field(...,max_length=100)
-    ssh_port : int = Field(default=22,ge=1,le=65535)
-    username : str | None = None
-    location : str | None = None
-    notes : str | None = None
+    vendor: Vendor
+    model: str = Field(..., max_length=100)
+    devicetype: Devicetype
+    operating_system: str = Field(..., max_length=100)
+    ssh_port: int = Field(default=22, ge=1, le=65535)
+    username: str | None = None
+    location: str | None = None
+    notes: str | None = None
 
 
 # For creating new devices
@@ -34,7 +37,7 @@ class DeviceUpdate(BaseModel):
     ip_address: str | None = None
     vendor: Vendor | None = None
     model: str | None = None
-    device_type: DeviceType | None = None
+    device_type: Devicetype | None = None
     operating_system: str | None = None
     ssh_port: int | None = None
     username: str | None = None
