@@ -10,15 +10,15 @@ from app.schemas.device import DeviceCreate,DeviceUpdate
 class DeviceService:
     """Business logic for Network devices"""
 
-    def create_device(self,db:Session,device:DeviceCreate) -> Device : # Function to create a define and verifed that a hostname machine is already present
+    def create_device(self,db:Session,device:DeviceCreate) -> Device : 
         existing = device_repository.get_by_hostname(db,device.hostname)
         if existing:
-            raise ValueError("A device with this hostname alrasy exist")
+            raise ValueError("A device with this hostname already exists")
 
         return device_repository.create(db,device)
 
     def get_devices(self,db:Session):
-        return device_repository.get_all(db)   # Function to get the devices    
+        return device_repository.get_all(db)   
 
     def get_device(self,db:Session,device_id:UUID):
         device = device_repository.get_by_id(db,device_id)
@@ -26,14 +26,14 @@ class DeviceService:
         if not device:
             raise ValueError('Device not found')
 
-            return device
+        return device
 
     def update_device(self,db:Session,device_id:UUID,update:DeviceUpdate):
         device = self.get_device(db,device_id)
 
         return device_repository.update(db,device,update)
 
-    def delete_device(self ,db:Session, device_id:UUID):
+    def delete_device(self,db:Session, device_id:UUID):
         device = self.get_device(db,device_id)
 
         return device_repository.delete(db,device)                  

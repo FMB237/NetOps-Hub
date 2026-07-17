@@ -44,7 +44,7 @@ def get_devices(db:Session = Depends(get_db)):
 @router.get("/{device_id}",response_model=DeviceResponse)
 def get_device(device_id:UUID,db:Session = Depends(get_db)):
     try:
-        return device_service.get_devices(db,device_id)
+        return device_service.get_device(db,device_id)
     except ValueError as e:
         raise HTTPException(status_code=404,detail=str(e))
 
