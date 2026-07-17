@@ -122,3 +122,13 @@ After building our RestAPI let move on and test our API only using the Fastapi d
 
 Now we are done with the doing of the backend Let move to the Frontend Using (HTML,CSS,Js,BootStrap and Jinja2Templates)
 - We need to install Jinja2 then  start Buidling Our Frontend Move on to the static file 
+- Now that we have a functional Frontend Prototype let try to make it better 
+- By adding devices formats and frontend Router for our HTML Renders
+- We are doing this to not mix our API endpoints of the Fastapi with  that of our HTML
+- So for that we gonna create a folder inside our project and called it web and inside that folder create a file called views.py that will contain our routers 
+- This is the main structure 
+- /api/devices → JSON (REST API)
+/devices       → HTML (Jinja2)
+- After the view.PY configuration register it and include it into the main.py file 
+- Then go update the sidebar of our dashboard
+- 
