@@ -9,7 +9,11 @@ from app.api.device_router import router as device_router
 # Import all models
 import app.models
 
-app = FastAPI(title="NetOps Hub")
+app = FastAPI(
+    title="NetOps Hub",
+    description="Network Operations and Automation Platform",
+    version="1.0.0"
+)
 
 app.include_router(device_router)
 
@@ -20,4 +24,10 @@ Base.metadata.create_all(bind=engine)
 def home():
     return{
         "message":"Hello NetHub-Ops"
+    }
+
+@app.get("/health")
+def health():
+    return {
+        "status": "healthy"
     }

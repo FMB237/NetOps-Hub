@@ -117,3 +117,4 @@ For that move on to the services folder and create the file device_service.py
 
 **Building the RESTAPI**
 So let move on the to api Folder.Then we gonna create an __init__.py file 
+After building our RestAPI let move on and test our API only using the Fastapi docs on the link [text](http://localhost:8000/docs)

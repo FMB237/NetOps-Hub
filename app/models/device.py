@@ -49,7 +49,7 @@ class Device(Base):
         Enum(Devicetype),
         nullable=False,
     )
-    oprating_system : Mapped[str]  = mapped_column(
+    operating_system : Mapped[str]  = mapped_column(
         String(100),
         nullable=False,
     )
@@ -63,6 +63,10 @@ class Device(Base):
     )
     location : Mapped[str | None] = mapped_column(
         String(255),
+        nullable=True,
+    )
+    notes : Mapped[str | None] = mapped_column(
+        Text,
         nullable=True,
     )
     created_at : Mapped [datetime] = mapped_column(
