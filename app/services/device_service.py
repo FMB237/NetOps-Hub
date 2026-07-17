@@ -20,8 +20,7 @@ class DeviceService:
     def get_devices(self,db:Session):
         return device_repository.get_all(db)   # Function to get the devices    
 
-       
-    def get_services(self,db:Session,device_id:UUID):
+    def get_device(self,db:Session,device_id:UUID):
         device = device_repository.get_by_id(db,device_id)
 
         if not device:
@@ -30,15 +29,14 @@ class DeviceService:
             return device
 
     def update_device(self,db:Session,device_id:UUID,update:DeviceUpdate):
-        device = self.get_devices(db,device_id)
+        device = self.get_device(db,device_id)
 
         return device_repository.update(db,device,update)
 
-    def delete_device(self ,db:Session, device_id:UUID,):
-        device = self.get_devices(db,device_id)
+    def delete_device(self ,db:Session, device_id:UUID):
+        device = self.get_device(db,device_id)
 
-        return device_repository.delete(db,device,update)                  
+        return device_repository.delete(db,device)                  
 
 
 device_service= DeviceService()
-        

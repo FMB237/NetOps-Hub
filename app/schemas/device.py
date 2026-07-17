@@ -18,7 +18,7 @@ class DeviceBase(BaseModel):
     ip_address: str
     vendor: Vendor
     model: str = Field(..., max_length=100)
-    devicetype: Devicetype
+    device_type: Devicetype
     operating_system: str = Field(..., max_length=100)
     ssh_port: int = Field(default=22, ge=1, le=65535)
     username: str | None = None
