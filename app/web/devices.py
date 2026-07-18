@@ -20,5 +20,8 @@ def device_page(request:Request,db: Session = Depends(get_db)):
     return templates.TemplateResponse(
         request=request,
         name="devices/index.html",
-        context={"devices": devices}
+        context={
+            "devices": devices,
+            "active_page": "devices",
+        }
     )

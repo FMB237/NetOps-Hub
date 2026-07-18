@@ -145,3 +145,21 @@ With this we have a modular structure instead of a fully centralise app
 So let remove the views.py and add  first the dashboard.py file 
 We will also create a  and other file that we will used for router for the devices since we did that for the dashboard
 So let create a file and call it devices.py that will be store in the path app/web/devices.py
+
+Now let update our dashboard.py for it to give us better informations returning our dashboard that is direct data into it .
+After that we will simplies update of dashboard.html and sidebar.html for new rendering 
+
+
+Since this project is too Color for a network projet we gonna Create our own Css component 
+**Css Stucture**
+static/css/
+base.css
+layout.css
+navbar.css
+sidebar.css
+animations.css
+For this we gonna change the Html base Template then move on into the css folder and create a base.css file that we will used as template for all the our devices  Then create the layout.css 
+- Let build our sidebar component and modified our sidebar.html for them to be in faces
+- Now let build our navbar.html and Navbar.css
+- Also update the base.css and create an animation.css file 
+- 
