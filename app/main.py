@@ -4,8 +4,10 @@ from fastapi.templating import Jinja2Templates
 
 from app.database.base import Base
 from app.database.database import engine
-from app.api.device_router import router as device_router
-from app.web.views import router as web_router
+from app.api.device_router import router as device_api
+# from app.web.views import router as web_router Instead of adding one router we gonna import 2 small ones
+from app.web.dashboard import router as dashboard_router
+from app.web.devices import router as devices_router
 
 # Import all models so SQLAlchemy can register them
 import app.models
@@ -17,8 +19,10 @@ app = FastAPI(
 )
 
 # Including API routes
-app.include_router(device_router) # Devices Router 
-app.include_router(web_router)  # Frontend Router
+app.include_router(device_api) # Devices Router 
+#app.include_router(web_router)  # Frontend Router
+app.include_router(dashboard_router)
+app.include_router(devices_router)
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
