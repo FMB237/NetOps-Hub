@@ -1,0 +1,63 @@
+.top-navbar{
+
+    height:75px;
+
+    background:#111827;
+
+    border-bottom:1px solid rgba(255,255,255,.05);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 30px;
+
+}
+
+.page-title{
+
+    margin:0;
+
+    color:#f8fafc;
+
+    font-weight:600;
+
+}
+
+.navbar-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+}
+
+.icon-btn{
+
+    width:42px;
+
+    height:42px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#1e293b;
+
+    color:#f8fafc;
+
+    transition:.3s;
+
+}
+
+.icon-btn:hover{
+
+    background:#2563eb;
+
+    transform:translateY(-2px);
+
+}

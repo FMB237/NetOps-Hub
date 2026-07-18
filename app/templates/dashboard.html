@@ -1,26 +1,103 @@
 {% extends "base.html" %}
 
 {% block title %}
-Dashboard
+Dashboard | NetOps Hub
 {% endblock %}
 
 {% block content %}
 
-<h2 class="mb-4">
-    Dashboard
-</h2>
+<div class="container-fluid">
 
-<div class="row">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-    <div class="col-md-4">
+        <div>
+            <h2 class="fw-bold">Dashboard</h2>
+            <p class="text-muted mb-0">
+                Welcome to NetOps Hub Network Management Dashboard
+            </p>
+        </div>
 
-        <div class="card">
+    </div>
 
-            <div class="card-body">
+    <!-- Statistics Cards -->
+    <div class="row g-4">
 
-                <h5>Total Devices</h5>
+        <div class="col-lg-3 col-md-6">
 
-                <h2>0</h2>
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Total Devices
+                    </h6>
+
+                    <h2 class="fw-bold">
+                        {{ total_devices }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Online Devices
+                    </h6>
+
+                    <h2 class="fw-bold text-success">
+                        0
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Offline Devices
+                    </h6>
+
+                    <h2 class="fw-bold text-danger">
+                        0
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Vendors
+                    </h6>
+
+                    <h2 class="fw-bold text-primary">
+                        0
+                    </h2>
+
+                </div>
 
             </div>
 
@@ -28,31 +105,76 @@ Dashboard
 
     </div>
 
-    <div class="col-md-4">
+    <!-- Recent Devices -->
+    <div class="card shadow-sm border-0 mt-5">
 
-        <div class="card">
+        <div class="card-header bg-white">
 
-            <div class="card-body">
-
-                <h5>Online</h5>
-
-                <h2>0</h2>
-
-            </div>
+            <h5 class="mb-0">
+                Recent Devices
+            </h5>
 
         </div>
 
-    </div>
+        <div class="card-body">
 
-    <div class="col-md-4">
+            <div class="table-responsive">
 
-        <div class="card">
+                <table class="table table-hover align-middle">
 
-            <div class="card-body">
+                    <thead class="table-light">
 
-                <h5>Offline</h5>
+                        <tr>
 
-                <h2>0</h2>
+                            <th>Hostname</th>
+                            <th>IP Address</th>
+                            <th>Vendor</th>
+                            <th>Device Type</th>
+                            <th>Operating System</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% if devices %}
+
+                            {% for device in devices[:5] %}
+
+                            <tr>
+
+                                <td>{{ device.hostname }}</td>
+
+                                <td>{{ device.ip_address }}</td>
+
+                                <td>{{ device.vendor }}</td>
+
+                                <td>{{ device.device_type }}</td>
+
+                                <td>{{ device.operating_system }}</td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        {% else %}
+
+                            <tr>
+
+                                <td colspan="5" class="text-center text-muted py-4">
+
+                                    No devices found.
+
+                                </td>
+
+                            </tr>
+
+                        {% endif %}
+
+                    </tbody>
+
+                </table>
 
             </div>
 
