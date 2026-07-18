@@ -131,4 +131,17 @@ Now we are done with the doing of the backend Let move to the Frontend Using (HT
 /devices       → HTML (Jinja2)
 - After the view.PY configuration register it and include it into the main.py file 
 - Then go update the sidebar of our dashboard
-- 
+- Let update our Web Folder for additional support on our Webviews 
+- Instead of a simple an principal views.py for handling the routing let split that into many files
+-  **Stucture**
+  ├── web/                    # HTML Pages
+│   ├── __init__.py
+│   ├── dashboard.py
+│   ├── devices.py
+│   ├── monitoring.py
+│   ├── backups.py
+│   └── settings.py
+With this we have a modular structure instead of a fully centralise app
+So let remove the views.py and add  first the dashboard.py file 
+We will also create a  and other file that we will used for router for the devices since we did that for the dashboard
+So let create a file and call it devices.py that will be store in the path app/web/devices.py
