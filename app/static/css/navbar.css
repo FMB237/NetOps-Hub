@@ -61,3 +61,36 @@
     transform:translateY(-2px);
 
 }
+.navbar-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+
+}
+
+.toggle-btn{
+
+    width:42px;
+
+    height:42px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#1e293b;
+
+    color:white;
+
+    transition:.3s;
+
+}
+
+.toggle-btn:hover{
+
+    background:#2563eb;
+
+}

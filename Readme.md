@@ -163,4 +163,7 @@ For this we gonna change the Html base Template then move on into the css folder
 - Now let build our navbar.html and Navbar.css
 - Also update the base.css and create an animation.css file 
 - Now let add some card stats 
+- After the adding the stat_cards and add cards.css for dynamic Card loading let add a Collapsible Sidebar
+- For that create a file with name sidebae.js into the files path app/templates/static/js/sidebar.js
+- Update the navabar.html and also update the navbar.css and sidebar.css
 - 
