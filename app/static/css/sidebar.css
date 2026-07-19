@@ -111,3 +111,38 @@
     text-align:center;
 
 }
+.sidebar{
+
+    transition:.3s ease;
+
+}
+
+.sidebar.collapsed{
+
+    width:85px;
+
+}
+
+.sidebar.collapsed .logo span{
+
+    display:none;
+
+}
+
+.sidebar.collapsed .menu-item span{
+
+    display:none;
+
+}
+
+.sidebar.collapsed .menu-item{
+
+    justify-content:center;
+
+}
+
+.sidebar.collapsed .logo{
+
+    justify-content:center;
+
+}
