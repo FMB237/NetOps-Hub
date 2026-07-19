@@ -128,3 +128,9 @@
     box-shadow:0 0 0 1px rgba(255,255,255,.12) inset;
 
 }
+
+.toggle-btn.active i{
+
+    transform:rotate(180deg);
+
+}
