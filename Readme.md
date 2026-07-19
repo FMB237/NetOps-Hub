@@ -162,4 +162,5 @@ For this we gonna change the Html base Template then move on into the css folder
 - Let build our sidebar component and modified our sidebar.html for them to be in faces
 - Now let build our navbar.html and Navbar.css
 - Also update the base.css and create an animation.css file 
+- Now let add some card stats 
 - 
