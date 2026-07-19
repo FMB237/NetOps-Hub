@@ -121,6 +121,8 @@
 
     width:85px;
 
+    min-width:85px;
+
 }
 
 .sidebar.collapsed .logo span{

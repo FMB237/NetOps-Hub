@@ -30,3 +30,9 @@
     transition:.3s;
 
 }
+
+.app-wrapper.sidebar-collapsed .main-wrapper{
+
+    min-width:0;
+
+}
