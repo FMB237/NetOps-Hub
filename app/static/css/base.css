@@ -4,10 +4,20 @@
     --sidebar:#111827;
     --card:#1e293b;
 
-    --primary:#2563eb;
-    --success:#22c55e;
+    --dashboard:#3B82F6;
+    --devices:#06B6D4;
+    --monitoring:#22C55E;
+    --topology:#6366F1;
+    --automation:#FACC15;
+    --backup:#A855F7;
+    --reports:#F97316;
+    --users:#EC4899;
+    --settings:#64748B;
+
+    --primary:var(--dashboard);
+    --success:var(--monitoring);
     --danger:#ef4444;
-    --warning:#f59e0b;
+    --warning:var(--automation);
 
     --text:#f8fafc;
     --muted:#94a3b8;

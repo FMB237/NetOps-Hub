@@ -2,7 +2,7 @@
 
     width:260px;
 
-    background:#111827;
+    background:var(--sidebar);
 
     border-right:1px solid rgba(255,255,255,.05);
 
@@ -46,7 +46,7 @@
 
 .logo i{
 
-    color:#3b82f6;
+    color:var(--dashboard);
 
     font-size:28px;
 
@@ -86,7 +86,7 @@
 
 .menu-item:hover{
 
-    background:#1e293b;
+    background:var(--card);
 
     color:white;
 
@@ -96,7 +96,7 @@
 
 .menu-item.active{
 
-    background:#2563eb;
+    background:var(--dashboard);
 
     color:white;
 
@@ -111,6 +111,69 @@
     text-align:center;
 
 }
+
+.sidebar-menu .menu-item:nth-child(1) i{
+
+    color:var(--dashboard);
+
+}
+
+.sidebar-menu .menu-item:nth-child(2) i{
+
+    color:var(--devices);
+
+}
+
+.sidebar-menu .menu-item:nth-child(3) i{
+
+    color:var(--monitoring);
+
+}
+
+.sidebar-menu .menu-item:nth-child(4) i{
+
+    color:var(--topology);
+
+}
+
+.sidebar-menu .menu-item:nth-child(5) i{
+
+    color:var(--automation);
+
+}
+
+.sidebar-menu .menu-item:nth-child(6) i,
+.sidebar-menu .menu-item:nth-child(7) i{
+
+    color:var(--backup);
+
+}
+
+.sidebar-menu .menu-item:nth-child(8) i{
+
+    color:var(--reports);
+
+}
+
+.sidebar-menu .menu-item:nth-child(9) i{
+
+    color:var(--users);
+
+}
+
+.sidebar-menu .menu-item:nth-child(10) i{
+
+    color:var(--settings);
+
+}
+
+.menu-item.active i,
+.menu-item:hover i{
+
+    color:currentColor;
+
+}
+
 .sidebar{
 
     transition:.3s ease;
