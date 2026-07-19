@@ -85,12 +85,46 @@
 
     color:white;
 
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    cursor:pointer;
+
     transition:.3s;
+
+}
+
+.toggle-btn i{
+
+    font-size:22px;
+
+    line-height:1;
 
 }
 
 .toggle-btn:hover{
 
     background:#2563eb;
+
+    transform:translateY(-2px);
+
+}
+
+.toggle-btn:focus-visible{
+
+    outline:3px solid rgba(59,130,246,.45);
+
+    outline-offset:2px;
+
+}
+
+.toggle-btn.active{
+
+    background:#2563eb;
+
+    box-shadow:0 0 0 1px rgba(255,255,255,.12) inset;
 
 }
