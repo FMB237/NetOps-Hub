@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-Dashboard | NetOps Hub
+Dashboard
 {% endblock %}
 
 {% block content %}
@@ -12,169 +12,197 @@ Dashboard | NetOps Hub
     <div class="d-flex justify-content-between align-items-center mb-4">
 
         <div>
-            <h2 class="fw-bold">Dashboard</h2>
-            <p class="text-muted mb-0">
-                Welcome to NetOps Hub Network Management Dashboard
+
+            <h2 class="fw-bold mb-1">
+                Dashboard
+            </h2>
+
+            <p class="text-secondary mb-0">
+                Welcome to the NetOps Hub Network Operations Center
             </p>
+
+        </div>
+
+        <div>
+
+            <span class="badge bg-success fs-6">
+                System Online
+            </span>
+
         </div>
 
     </div>
 
     <!-- Statistics Cards -->
-    <div class="row g-4">
+    <div class="row g-4 mb-4">
 
-        <div class="col-lg-3 col-md-6">
+        {% with
+            title="Total Devices",
+            value=total_devices,
+            icon="bi bi-hdd-network-fill",
+            subtitle="Registered devices"
+        %}
+            {% include "components/stat_card.html" %}
+        {% endwith %}
 
-            <div class="card shadow-sm border-0">
+        {% with
+            title="Online Devices",
+            value=0,
+            icon="bi bi-wifi",
+            subtitle="Operational"
+        %}
+            {% include "components/stat_card.html" %}
+        {% endwith %}
 
-                <div class="card-body">
+        {% with
+            title="Offline Devices",
+            value=0,
+            icon="bi bi-wifi-off",
+            subtitle="Require attention"
+        %}
+            {% include "components/stat_card.html" %}
+        {% endwith %}
 
-                    <h6 class="text-muted">
-                        Total Devices
-                    </h6>
-
-                    <h2 class="fw-bold">
-                        {{ total_devices }}
-                    </h2>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-
-            <div class="card shadow-sm border-0">
-
-                <div class="card-body">
-
-                    <h6 class="text-muted">
-                        Online Devices
-                    </h6>
-
-                    <h2 class="fw-bold text-success">
-                        0
-                    </h2>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-
-            <div class="card shadow-sm border-0">
-
-                <div class="card-body">
-
-                    <h6 class="text-muted">
-                        Offline Devices
-                    </h6>
-
-                    <h2 class="fw-bold text-danger">
-                        0
-                    </h2>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-
-            <div class="card shadow-sm border-0">
-
-                <div class="card-body">
-
-                    <h6 class="text-muted">
-                        Vendors
-                    </h6>
-
-                    <h2 class="fw-bold text-primary">
-                        0
-                    </h2>
-
-                </div>
-
-            </div>
-
-        </div>
+        {% with
+            title="Vendors",
+            value=0,
+            icon="bi bi-buildings-fill",
+            subtitle="Registered vendors"
+        %}
+            {% include "components/stat_card.html" %}
+        {% endwith %}
 
     </div>
 
-    <!-- Recent Devices -->
-    <div class="card shadow-sm border-0 mt-5">
+    <!-- Dashboard Content -->
+    <div class="row">
 
-        <div class="card-header bg-white">
+        <!-- Recent Devices -->
+        <div class="col-lg-8">
 
-            <h5 class="mb-0">
-                Recent Devices
-            </h5>
+            <div class="card">
+
+                <div class="card-header d-flex justify-content-between align-items-center">
+
+                    <h5 class="mb-0">
+                        Recent Devices
+                    </h5>
+
+                    <a href="/devices" class="btn btn-sm btn-primary">
+                        View All
+                    </a>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="table-responsive">
+
+                        <table class="table table-hover align-middle">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Hostname</th>
+                                    <th>IP Address</th>
+                                    <th>Vendor</th>
+                                    <th>Type</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                {% for device in devices[:5] %}
+
+                                <tr>
+
+                                    <td>{{ device.hostname }}</td>
+
+                                    <td>{{ device.ip_address }}</td>
+
+                                    <td>{{ device.vendor }}</td>
+
+                                    <td>{{ device.device_type }}</td>
+
+                                </tr>
+
+                                {% else %}
+
+                                <tr>
+
+                                    <td colspan="4" class="text-center py-4">
+
+                                        No devices found.
+
+                                    </td>
+
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 
-        <div class="card-body">
+        <!-- Quick Actions -->
+        <div class="col-lg-4">
 
-            <div class="table-responsive">
+            <div class="card">
 
-                <table class="table table-hover align-middle">
+                <div class="card-header">
 
-                    <thead class="table-light">
+                    <h5 class="mb-0">
+                        Quick Actions
+                    </h5>
 
-                        <tr>
+                </div>
 
-                            <th>Hostname</th>
-                            <th>IP Address</th>
-                            <th>Vendor</th>
-                            <th>Device Type</th>
-                            <th>Operating System</th>
+                <div class="card-body d-grid gap-3">
 
-                        </tr>
+                    <a href="/devices/create" class="btn btn-primary">
 
-                    </thead>
+                        <i class="bi bi-plus-circle me-2"></i>
 
-                    <tbody>
+                        Add Device
 
-                        {% if devices %}
+                    </a>
 
-                            {% for device in devices[:5] %}
+                    <button class="btn btn-success">
 
-                            <tr>
+                        <i class="bi bi-arrow-repeat me-2"></i>
 
-                                <td>{{ device.hostname }}</td>
+                        Scan Network
 
-                                <td>{{ device.ip_address }}</td>
+                    </button>
 
-                                <td>{{ device.vendor }}</td>
+                    <button class="btn btn-warning">
 
-                                <td>{{ device.device_type }}</td>
+                        <i class="bi bi-download me-2"></i>
 
-                                <td>{{ device.operating_system }}</td>
+                        Backup Configurations
 
-                            </tr>
+                    </button>
 
-                            {% endfor %}
+                    <button class="btn btn-info text-white">
 
-                        {% else %}
+                        <i class="bi bi-graph-up-arrow me-2"></i>
 
-                            <tr>
+                        Generate Report
 
-                                <td colspan="5" class="text-center text-muted py-4">
+                    </button>
 
-                                    No devices found.
-
-                                </td>
-
-                            </tr>
-
-                        {% endif %}
-
-                    </tbody>
-
-                </table>
+                </div>
 
             </div>
 

@@ -1,0 +1,39 @@
+<div class="col-xl-3 col-md-6 mb-4">
+
+    <div class="stat-card">
+
+        <div class="stat-card-header">
+
+            <div>
+
+                <p class="stat-title">
+                    {{ title }}
+                </p>
+
+                <h2 class="stat-value">
+                    {{ value }}
+                </h2>
+
+            </div>
+
+            <div class="stat-icon">
+
+                <i class="{{ icon }}"></i>
+
+            </div>
+
+        </div>
+
+        {% if subtitle %}
+
+        <small class="stat-subtitle">
+
+            {{ subtitle }}
+
+        </small>
+
+        {% endif %}
+
+    </div>
+
+</div>
