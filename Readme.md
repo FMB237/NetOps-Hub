@@ -208,4 +208,11 @@ Now let  update our project struture by adding new stuffs
 3. Now let go fill our create.html for our device form creation then will create a simple css file call form.css for that form in particular 
 4. Then just update the link to the base.html file 
 5. Now let add some network connection tools services which will be a smart approch for network happening using some python modules 
-6. 
+
+
+Let move to the used and check of SSH Connectivity 
+For that we need to install a library mainly paramiko using the command pip install paramiko 
+Now let update the create.html file  by adding a password field under the user field
+Then update the Network schema
+Build a real ssh connection using paramiko this is done inside the network_service.py file 
+

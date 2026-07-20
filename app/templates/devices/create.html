@@ -9,20 +9,15 @@ Add Device
 <div class="container-fluid">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-
         <div>
-
             <h2 class="fw-bold">
                 <i class="bi bi-router-fill text-primary me-2"></i>
                 Register Network Device
             </h2>
-
             <p class="text-muted mb-0">
                 Add a new network device to the NetOps Hub inventory.
             </p>
-
         </div>
-
         <a href="/devices" class="btn btn-outline-secondary">
 
             <i class="bi bi-arrow-left"></i>
@@ -34,27 +29,16 @@ Add Device
     </div>
 
     <form action="/devices/create" method="POST">
-
         <div class="row">
-
             <!-- LEFT COLUMN -->
-
             <div class="col-lg-8">
-
                 <div class="card shadow-sm mb-4">
-
                     <div class="card-header">
-
                         <h5 class="mb-0">
-
                             Device Information
-
                         </h5>
-
                     </div>
-
                     <div class="card-body">
-
                         <div class="row">
 
                             <div class="col-md-6 mb-3">
@@ -232,6 +216,21 @@ Add Device
 
                         </div>
 
+                        <div class="mb-3">
+
+    <label class="form-label">
+
+        Password
+
+    </label>
+
+    <input
+        type="password"
+        class="form-control"
+        name="password"
+        placeholder="SSH Password">
+
+</div>
                         <div class="mb-3">
 
                             <label class="form-label">

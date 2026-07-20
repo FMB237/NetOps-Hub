@@ -5,6 +5,8 @@ btn.addEventListener('click',async()=>{
  const ip =document.querySelector('[name =ip_address]').value;
  const port = document.querySelector("[name= ssh_port]").value;
  const result = document.getElementById('connectionResult');
+ const username = document.querySelector("[name=username]").value;
+const password = document.querySelector("[name=password]").value;
 
 
 

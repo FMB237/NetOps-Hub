@@ -3,7 +3,10 @@ from pydantic import BaseModel,Field
 
 class ConnectedTestRequest(BaseModel):
     ip_address : str
-    port : int = Field(default=22)
+    port : int = Field(default=22) # Add username and password
+    username: str
+    password : str
+
 
 
 class ConnectedTestResponse(BaseModel):

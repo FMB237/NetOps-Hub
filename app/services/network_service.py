@@ -1,7 +1,7 @@
-# Network service checker file 
+# Network service checker devices
 
 # Let used some new python models
-import socket
+"""import socket
 import time 
 
 class NetworkService:
@@ -28,5 +28,81 @@ class NetworkService:
                 else "Unable to reach device"
             ),
         }
+
+network_service = NetworkService()"""
+
+
+import socket
+import time
+
+import paramiko
+
+
+class NetworkService:
+
+    def test_connection(
+        self,
+        ip,
+        port,
+        username,
+        password,
+    ):
+
+        ssh = paramiko.SSHClient()
+
+        ssh.set_missing_host_key_policy(
+            paramiko.AutoAddPolicy()
+        )
+
+        start = time.time()
+
+        try:
+
+            ssh.connect(
+                hostname=ip,
+                port=port,
+                username=username,
+                password=password,
+                timeout=5,
+                banner_timeout=5,
+                auth_timeout=5,
+            )
+
+            latency = round(
+                (time.time() - start) * 1000,
+                2,
+            )
+
+            stdin, stdout, stderr = ssh.exec_command(
+                "hostname"
+            )
+
+            hostname = stdout.read().decode().strip()
+
+            ssh.close()
+
+            return {
+                "reachable": True,
+                "port_open": True,
+                "latency": f"{latency} ms",
+                "message": "SSH connection successful",
+                "hostname": hostname,
+            }
+        except Exception as e:
+
+            return {
+                "reachable": False,
+                "port_open": False,
+                "latency": None,
+                "message": str(e),
+                "hostname": None,
+            }
+            return network_service.test_connection(
+    request.ip_address,
+    request.port,
+    request.username,
+    request.password,
+)
+
 
 network_service = NetworkService()
