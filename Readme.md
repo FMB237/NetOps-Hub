@@ -205,4 +205,6 @@ Now let correct the devicetype usage by using the camet case  format for all our
 Now let  update our project struture by adding new stuffs 
 1. move to the app/web/devices.py file  and update it  for our crud operations
 2. Now let go add  services into our create.html file 
-3. 
+3. Now let go fill our create.html for our device form creation then will create a simple css file call form.css for that form in particular 
+4. Then just update the link to the base.html file 
+5. 
