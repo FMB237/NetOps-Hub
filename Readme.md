@@ -201,3 +201,8 @@ app/templates/devices folder.
 Now let correct the devicetype usage by using the camet case  format for all our devicetype in our backend 
 
 *So i need to prompt for handlling the differcent in device_type*
+
+Now let  update our project struture by adding new stuffs 
+1. move to the app/web/devices.py file  and update it  for our crud operations
+2. Now let go add  services into our create.html file 
+3. 
