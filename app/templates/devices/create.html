@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
-{% block title %}Add Device{% endblock %}
+{% block title %}
+Add Device
+{% endblock %}
 
 {% block content %}
 
@@ -11,11 +13,12 @@
         <div>
 
             <h2 class="fw-bold">
-                Add Network Device
+                <i class="bi bi-router-fill text-primary me-2"></i>
+                Register Network Device
             </h2>
 
-            <p class="text-secondary">
-                Register a new device in the inventory.
+            <p class="text-muted mb-0">
+                Add a new network device to the NetOps Hub inventory.
             </p>
 
         </div>
@@ -30,70 +33,77 @@
 
     </div>
 
-    <form method="post" action="/devices/create">
+    <form action="/devices/create" method="POST">
 
         <div class="row">
 
-            <!-- Left Column -->
+            <!-- LEFT COLUMN -->
 
-            <div class="col-lg-6">
+            <div class="col-lg-8">
 
                 <div class="card shadow-sm mb-4">
 
                     <div class="card-header">
 
                         <h5 class="mb-0">
-                            Basic Information
+
+                            Device Information
+
                         </h5>
 
                     </div>
 
                     <div class="card-body">
 
-                        <div class="mb-3">
+                        <div class="row">
 
-                            <label class="form-label">
-                                Hostname
-                            </label>
+                            <div class="col-md-6 mb-3">
 
-                            <input
-                                type="text"
-                                name="hostname"
-                                class="form-control"
-                                required
-                            >
+                                <label class="form-label">
 
-                        </div>
+                                    Hostname
 
-                        <div class="mb-3">
+                                </label>
 
-                            <label class="form-label">
-                                IP Address
-                            </label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    name="hostname"
+                                    placeholder="Core-R1"
+                                    required>
 
-                            <input
-                                type="text"
-                                name="ip_address"
-                                class="form-control"
-                                placeholder="192.168.1.1"
-                                required
-                            >
+                            </div>
 
-                        </div>
+                            <div class="col-md-6 mb-3">
 
-                        <div class="mb-3">
+                                <label class="form-label">
 
-                            <label class="form-label">
-                                Vendor
-                            </label>
+                                    IP Address
 
-                            <select
-                                name="vendor"
-                                class="form-select"
-                                required
-                            >
+                                </label>
 
-                                {% for vendor in vendors %}
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    name="ip_address"
+                                    placeholder="192.168.1.1"
+                                    required>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+
+                                    Vendor
+
+                                </label>
+
+                                <select
+                                    class="form-select"
+                                    name="vendor">
+
+                                    {% for vendor in vendors %}
 
                                     <option value="{{ vendor.value }}">
 
@@ -101,35 +111,69 @@
 
                                     </option>
 
-                                {% endfor %}
+                                    {% endfor %}
 
-                            </select>
+                                </select>
 
-                        </div>
+                            </div>
 
-                        <div class="mb-3">
+                            <div class="col-md-6 mb-3">
 
-                            <label class="form-label">
-                                Device Type
-                            </label>
+                                <label class="form-label">
 
-                            <select
-                                name="device_type"
-                                class="form-select"
-                                required
-                            >
+                                    Device Type
 
-                                {% for device_type in device_types %}
+                                </label>
 
-                                    <option value="{{ device_type.value }}">
+                                <select
+                                    class="form-select"
+                                    name="device_type">
 
-                                        {{ device_type.value }}
+                                    {% for device in device_types %}
+
+                                    <option value="{{ device.value }}">
+
+                                        {{ device.value }}
 
                                     </option>
 
-                                {% endfor %}
+                                    {% endfor %}
 
-                            </select>
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+
+                                    Model
+
+                                </label>
+
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    name="model"
+                                    placeholder="Catalyst 9300">
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+
+                                    Operating System
+
+                                </label>
+
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    name="operating_system"
+                                    placeholder="IOS-XE">
+
+                            </div>
 
                         </div>
 
@@ -139,16 +183,18 @@
 
             </div>
 
-            <!-- Right Column -->
+            <!-- RIGHT COLUMN -->
 
-            <div class="col-lg-6">
+            <div class="col-lg-4">
 
                 <div class="card shadow-sm mb-4">
 
                     <div class="card-header">
 
                         <h5 class="mb-0">
-                            Connection Information
+
+                            SSH Configuration
+
                         </h5>
 
                     </div>
@@ -158,87 +204,72 @@
                         <div class="mb-3">
 
                             <label class="form-label">
-                                Model
-                            </label>
 
-                            <input
-                                type="text"
-                                name="model"
-                                class="form-control"
-                            >
-
-                        </div>
-
-                        <div class="mb-3">
-
-                            <label class="form-label">
-                                Operating System
-                            </label>
-
-                            <input
-                                type="text"
-                                name="operating_system"
-                                class="form-control"
-                            >
-
-                        </div>
-
-                        <div class="mb-3">
-
-                            <label class="form-label">
                                 SSH Port
+
                             </label>
 
                             <input
+                                class="form-control"
                                 type="number"
                                 name="ssh_port"
-                                class="form-control"
-                                value="22"
-                            >
+                                value="22">
 
                         </div>
 
                         <div class="mb-3">
 
                             <label class="form-label">
+
                                 Username
+
                             </label>
 
                             <input
-                                type="text"
+                                class="form-control"
                                 name="username"
-                                class="form-control"
-                            >
+                                placeholder="admin">
 
                         </div>
 
                         <div class="mb-3">
 
                             <label class="form-label">
+
                                 Location
+
                             </label>
 
                             <input
-                                type="text"
+                                class="form-control"
                                 name="location"
-                                class="form-control"
-                            >
+                                placeholder="Douala DC">
 
                         </div>
 
-                        <div class="mb-3">
+                    </div>
 
-                            <label class="form-label">
-                                Notes
-                            </label>
+                </div>
 
-                            <textarea
-                                name="notes"
-                                rows="4"
-                                class="form-control"
-                            ></textarea>
+                <div class="card shadow-sm">
 
-                        </div>
+                    <div class="card-header">
+
+                        <h5 class="mb-0">
+
+                            Notes
+
+                        </h5>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <textarea
+                            class="form-control"
+                            rows="6"
+                            name="notes"
+                            placeholder="Additional information..."></textarea>
 
                     </div>
 
@@ -248,16 +279,23 @@
 
         </div>
 
-        <div class="text-end">
+        <div class="d-flex justify-content-end mt-4">
+
+            <a
+                href="/devices"
+                class="btn btn-outline-secondary me-2">
+
+                Cancel
+
+            </a>
 
             <button
-                type="submit"
-                class="btn btn-primary btn-lg"
-            >
+                class="btn btn-primary"
+                type="submit">
 
-                <i class="bi bi-floppy"></i>
+                <i class="bi bi-check-circle-fill me-2"></i>
 
-                Save Device
+                Register Device
 
             </button>
 
