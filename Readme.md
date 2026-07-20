@@ -167,4 +167,33 @@ For this we gonna change the Html base Template then move on into the css folder
 - For that create a file with name sidebae.js into the files path app/templates/static/js/sidebar.js
 - Update the navabar.html and also update the navbar.css and sidebar.css
 - Since Our UI is done let move to Sprint 2 with More functionalities.
-- 
+
+
+**Now let move on to Sprint 3**
+- Which is mainly the addition of new features to our app that is mainly Device Management Modules. 
+- This will be done into many faces  that : 
+- Phase1 : Device list  which gonna include the following base  features.
+- ✅ Beautiful table
+- ✅ Search bar
+- ✅ Filter by Vendor 
+- ✅ Filter by Device Type
+- ✅ Status badge 
+- ✅ Action buttons
+- ✅ Pagination (later)
+-  *Phase2* will mainly be device  additions which gonna have the following features
+- Professional form
+- Validation
+- Save to PostgreSQL
+- Success message
+- Redirect to Device List
+- *Phase3* the edit phase 
+- *Phase4* the update phase 
+
+With that we will mainly completed our Crud Operation
+For all this modification we gonna change our project stucture by adding some new files for features like the index.html,edit.hml and create.html inside our 
+app/templates/devices folder.
+
+1. Let improve our app/web/devices.py to handle all this functions  Since the file is oka we gonna move to the new step
+2. Create a devices.css file in other style our devices for that move on to the app/static/css folder and then create that file 
+3. Then add the link to the to base.html file 
+4. Then change the format of our index.html in the app/devices/index.html
