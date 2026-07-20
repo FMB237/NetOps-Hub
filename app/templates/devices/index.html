@@ -1,19 +1,34 @@
 {% extends "base.html" %}
 
-{% block title %}
-Devices
-{% endblock %}
+{% block title %}Devices{% endblock %}
 
 {% block content %}
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
 
-    <h2>
-        Device Management
-    </h2>
+    <div>
 
-    <a href="/devices/create" class="btn btn-primary">
-        + Add Device
+        <h2 class="fw-bold">
+            Device Inventory
+        </h2>
+
+        <p class="text-secondary">
+
+            Manage all network devices
+
+        </p>
+
+    </div>
+
+    <a
+        href="/devices/create"
+        class="btn btn-primary"
+    >
+
+        <i class="bi bi-plus-circle"></i>
+
+        Add Device
+
     </a>
 
 </div>
@@ -22,68 +37,117 @@ Devices
 
     <div class="card-body">
 
-        <table class="table table-hover align-middle">
+        <div class="row mb-4">
 
-            <thead class="table-dark">
+            <div class="col-md-6">
 
-                <tr>
+                <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Search hostname..."
+                >
 
-                    <th>Hostname</th>
+            </div>
 
-                    <th>IP Address</th>
+            <div class="col-md-3">
 
-                    <th>Vendor</th>
+                <select class="form-select">
 
-                    <th>Type</th>
+                    <option>All Vendors</option>
 
-                    <th>OS</th>
+                </select>
 
-                    <th>Actions</th>
+            </div>
 
-                </tr>
+            <div class="col-md-3">
 
-            </thead>
+                <select class="form-select">
 
-            <tbody>
+                    <option>All Types</option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="table align-middle table-hover">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Hostname</th>
+                        <th>IP Address</th>
+                        <th>Vendor</th>
+                        <th>Type</th>
+                        <th>Operating System</th>
+                        <th>Actions</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
 
                 {% for device in devices %}
 
-                <tr>
+                    <tr>
 
-                    <td>{{ device.hostname }}</td>
+                        <td>{{ device.hostname }}</td>
 
-                    <td>{{ device.ip_address }}</td>
+                        <td>{{ device.ip_address }}</td>
 
-                    <td>{{ device.vendor }}</td>
+                        <td>{{ device.vendor }}</td>
 
-                    <td>{{ device.device_type }}</td>
+                        <td>{{ device.devicetype }}</td>
 
-                    <td>{{ device.operating_system }}</td>
+                        <td>{{ device.operating_system }}</td>
 
-                    <td>
+                        <td>
 
-                        <a
-                            href="/devices/{{ device.id }}/edit"
-                            class="btn btn-warning btn-sm"
-                        >
-                            Edit
-                        </a>
+                            <a
+                                href="/devices/{{ device.id }}/edit"
+                                class="btn btn-sm btn-warning"
+                            >
 
-                        <button
-                            class="btn btn-danger btn-sm"
-                        >
-                            Delete
-                        </button>
+                                <i class="bi bi-pencil"></i>
 
-                    </td>
+                            </a>
 
-                </tr>
+                            <button
+                                class="btn btn-sm btn-danger"
+                            >
+
+                                <i class="bi bi-trash"></i>
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                {% else %}
+
+                    <tr>
+
+                        <td colspan="6" class="text-center py-5">
+
+                            No devices registered.
+
+                        </td>
+
+                    </tr>
 
                 {% endfor %}
 
-            </tbody>
+                </tbody>
 
-        </table>
+            </table>
+
+        </div>
 
     </div>
 
