@@ -1,1 +1,1 @@
-from app.models.device import Devicetype
+from app.models.device import DeviceType

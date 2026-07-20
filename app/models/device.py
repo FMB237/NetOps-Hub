@@ -15,7 +15,7 @@ from sqlalchemy.orm import mapped_column
 
 # Here we are mainly entrying the DB Importations
 from app.database.base import Base
-from app.models.enums import Devicetype
+from app.models.enums import DeviceType
 from app.models.enums import Vendor
 
 
@@ -45,8 +45,8 @@ class Device(Base):
         Enum(Vendor),
         nullable=False,
     )
-    device_type : Mapped[Devicetype] = mapped_column(
-        Enum(Devicetype),
+    device_type : Mapped[DeviceType] = mapped_column(
+        Enum(DeviceType),
         nullable=False,
     )
     operating_system : Mapped[str]  = mapped_column(

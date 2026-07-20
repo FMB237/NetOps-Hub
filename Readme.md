@@ -197,3 +197,7 @@ app/templates/devices folder.
 2. Create a devices.css file in other style our devices for that move on to the app/static/css folder and then create that file 
 3. Then add the link to the to base.html file 
 4. Then change the format of our index.html in the app/devices/index.html
+
+Now let correct the devicetype usage by using the camet case  format for all our devicetype in our backend 
+
+*So i need to prompt for handlling the differcent in device_type*
