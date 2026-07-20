@@ -1,68 +1,118 @@
-# Let start Building our APIs
-
 from uuid import UUID
 
-from fastapi import APIRouter
-from fastapi import Depends
-from fastapi import HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.database.database import get_db
-from app.schemas.device import DeviceCreate
-from app.schemas.device import DeviceResponse
-from app.schemas.device import DeviceUpdate
+from app.schemas.device import DeviceCreate, DeviceResponse, DeviceUpdate
 from app.services.device_service import device_service
 
-# Let add our app router 
 
 router = APIRouter(
-    prefix="/devices",
-    tags=["Devices"]
+    prefix="/api/devices",
+    tags=["Devices"],
 )
 
-# Let start adding our app 
-@router.post("/",response_model=DeviceResponse,status_code=201)
-def create_device(device:DeviceCreate, db: Session = Depends(get_db)):
 
-    try :    
-        return device_service.create_device(db,device)
+# ==========================
+# Create Device
+# ==========================
+
+@router.post(
+    "/",
+    response_model=DeviceResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+def create_device(
+    device: DeviceCreate,
+    db: Session = Depends(get_db),
+):
+    try:
+        return device_service.create_device(db, device)
     except ValueError as e:
-        raise HTTPException(status_code=400,detail=str(e))
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e),
+        )
 
 
-
-           
-
+# ==========================
 # Get All Devices
-@router.get("/",response_model=list[DeviceResponse])
-def get_devices(db:Session = Depends(get_db)):
+# ==========================
+
+@router.get(
+    "/",
+    response_model=list[DeviceResponse],
+)
+def get_devices(
+    db: Session = Depends(get_db),
+):
     return device_service.get_devices(db)
 
 
-# Get Device by ID
+# ==========================
+# Get Device By ID
+# ==========================
 
-@router.get("/{device_id}",response_model=DeviceResponse)
-def get_device(device_id:UUID,db:Session = Depends(get_db)):
+@router.get(
+    "/{device_id}",
+    response_model=DeviceResponse,
+)
+def get_device(
+    device_id: UUID,
+    db: Session = Depends(get_db),
+):
     try:
-        return device_service.get_device(db,device_id)
+        return device_service.get_device(db, device_id)
     except ValueError as e:
-        raise HTTPException(status_code=404,detail=str(e))
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(e),
+        )
 
 
+# ==========================
 # Update Device
+# ==========================
 
-@router.put("/{device_id}",response_model=DeviceResponse)
-def update_device(device_id: UUID,device: DeviceUpdate, db: Session = Depends(get_db)):
+@router.put(
+    "/{device_id}",
+    response_model=DeviceResponse,
+)
+def update_device(
+    device_id: UUID,
+    device: DeviceUpdate,
+    db: Session = Depends(get_db),
+):
     try:
-        return device_service.update_device(db,device_id,device)
+        return device_service.update_device(
+            db,
+            device_id,
+            device,
+        )
     except ValueError as e:
-        raise HTTPException(status_code=404,detail=str(e))
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(e),
+        )
 
 
-@router.delete('/{device_id}',status_code=204)
-def delete_device(device_id:UUID, db: Session = Depends(get_db)):
+# ==========================
+# Delete Device
+# ==========================
+
+@router.delete(
+    "/{device_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+def delete_device(
+    device_id: UUID,
+    db: Session = Depends(get_db),
+):
     try:
-        device_service.delete_device(db,device_id)
+        device_service.delete_device(db, device_id)
     except ValueError as e:
-        raise HTTPException(status_code=404,detail=str(e))
-
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(e),
+        )

@@ -1,0 +1,57 @@
+.card{
+
+    border:none;
+
+    border-radius:15px;
+
+    background:var(--card);
+
+}
+
+.card-header{
+
+    background:transparent;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+    color:var(--text);
+
+}
+
+.form-label{
+
+    color:var(--text);
+
+    font-weight:500;
+
+}
+
+.form-control,
+.form-select{
+
+    background:#0f172a;
+
+    color:var(--text);
+
+    border:1px solid #334155;
+
+}
+
+.form-control:focus,
+.form-select:focus{
+
+    background:#0f172a;
+
+    color:var(--text);
+
+    border-color:var(--primary);
+
+    box-shadow:none;
+
+}
+
+textarea{
+
+    resize:none;
+
+}
