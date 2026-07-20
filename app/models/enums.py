@@ -2,7 +2,7 @@ from enum import Enum
 
 # Let create our class defines 
 
-class Devicetype(str,Enum):
+class DeviceType(str,Enum):
     ROUTER = "Router"
     SWITCH = "Switch"
     FIREWALL = "Firewall"
