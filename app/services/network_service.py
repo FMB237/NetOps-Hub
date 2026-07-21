@@ -97,12 +97,7 @@ class NetworkService:
                 "message": str(e),
                 "hostname": None,
             }
-            return network_service.test_connection(
-    request.ip_address,
-    request.port,
-    request.username,
-    request.password,
-)
+          
 
 
 network_service = NetworkService()

@@ -2,11 +2,13 @@ from fastapi import APIRouter, Depends, Request,Form
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from fastapi.responses import RedirectResponse
+from uuid import UUID
+from fastapi import HTTPException
 
 from app.database.database import get_db
 from app.services.device_service import device_service
 from app.models.enums import Vendor, DeviceType
-from app.schemas.device import DeviceCreate
+from app.schemas.device import DeviceCreate,DeviceUpdate
 
 router = APIRouter()
 
@@ -82,3 +84,70 @@ def create_device(
         status_code=303,
     )
 
+
+# Let add and edit route 
+@router.get("/devices/{device_id}/edit")
+def edit_device_form(
+    device_id: UUID,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    device = device_service.get_device(
+        db,
+        device_id,
+    )
+
+    return templates.TemplateResponse(
+        request=request,
+        name="devices/edit.html",
+        context={
+            "request": request,
+            "device": device,
+            "vendors": Vendor,
+            "device_types": DeviceType,
+            "form_action": f"/devices/{device_id}/edit",
+            "submit_label": "Save Changes",
+            "active_page": "devices",
+        },
+    )
+
+# let add a post request for editing 
+@router.post("/devices/{device_id}/edit")
+def update_device(
+    device_id: UUID,
+    hostname: str = Form(...),
+    ip_address: str = Form(...),
+    vendor: Vendor = Form(...),
+    device_type: DeviceType = Form(...),
+    model: str = Form(...),
+    operating_system: str = Form(...),
+    ssh_port: int = Form(22),
+    username: str | None = Form(None),
+    location: str | None = Form(None),
+    notes: str | None = Form(None),
+    db: Session = Depends(get_db),
+):
+
+    device = DeviceUpdate(
+        hostname=hostname,
+        ip_address=ip_address,
+        vendor=vendor,
+        device_type=device_type,
+        model=model,
+        operating_system=operating_system,
+        ssh_port=ssh_port,
+        username=username,
+        location=location,
+        notes=notes,
+    )
+
+    device_service.update_device(
+        db,
+        device_id,
+        device,
+    )
+
+    return RedirectResponse(
+        url="/devices",
+        status_code=303,
+    )    
