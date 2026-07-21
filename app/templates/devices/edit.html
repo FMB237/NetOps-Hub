@@ -8,11 +8,30 @@ Edit Device
 
 <div class="container-fluid">
 
-    <h2 class="mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-        Edit Network Device
+        <div>
 
-    </h2>
+            <h2 class="fw-bold">
+                <i class="bi bi-pencil-square text-warning me-2"></i>
+                Edit Network Device
+            </h2>
+
+            <p class="text-muted">
+                Update the information of an existing network device.
+            </p>
+
+        </div>
+
+        <a href="/devices" class="btn btn-outline-secondary">
+
+            <i class="bi bi-arrow-left"></i>
+
+            Back
+
+        </a>
+
+    </div>
 
     {% include "devices/_form.html" %}
 

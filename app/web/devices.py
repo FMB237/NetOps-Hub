@@ -3,11 +3,12 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from fastapi.responses import RedirectResponse
 from uuid import UUID
+from fastapi import HTTPException
 
 from app.database.database import get_db
 from app.services.device_service import device_service
 from app.models.enums import Vendor, DeviceType
-from app.schemas.device import DeviceCreate
+from app.schemas.device import DeviceCreate,DeviceUpdate
 
 router = APIRouter()
 
@@ -109,3 +110,44 @@ def edit_device_form(
             "active_page": "devices",
         },
     )
+
+# let add a post request for editing 
+@router.post("/devices/{device_id}/edit")
+def update_device(
+    device_id: UUID,
+    hostname: str = Form(...),
+    ip_address: str = Form(...),
+    vendor: Vendor = Form(...),
+    device_type: DeviceType = Form(...),
+    model: str = Form(...),
+    operating_system: str = Form(...),
+    ssh_port: int = Form(22),
+    username: str | None = Form(None),
+    location: str | None = Form(None),
+    notes: str | None = Form(None),
+    db: Session = Depends(get_db),
+):
+
+    device = DeviceUpdate(
+        hostname=hostname,
+        ip_address=ip_address,
+        vendor=vendor,
+        device_type=device_type,
+        model=model,
+        operating_system=operating_system,
+        ssh_port=ssh_port,
+        username=username,
+        location=location,
+        notes=notes,
+    )
+
+    device_service.update_device(
+        db,
+        device_id,
+        device,
+    )
+
+    return RedirectResponse(
+        url="/devices",
+        status_code=303,
+    )    
