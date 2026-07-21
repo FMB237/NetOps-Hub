@@ -1,215 +1,176 @@
 {% extends "base.html" %}
 
-{% block title %}
-Dashboard
-{% endblock %}
+{% block title %}Dashboard{% endblock %}
 
 {% block content %}
 
 <div class="container-fluid">
 
-    <!-- Page Header -->
+    <!-- Dashboard Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-
         <div>
-
-            <h2 class="fw-bold mb-1">
+            <h2 class="fw-bold">
+                <i class="bi bi-speedometer2 text-primary"></i>
                 Dashboard
             </h2>
-
-            <p class="text-secondary mb-0">
-                Welcome to the NetOps Hub Network Operations Center
+            <p class="text-white mb-0">
+                Welcome to NetOps Hub Network Operations Platform
             </p>
-
         </div>
-
-        <div>
-
-            <span class="badge bg-success fs-6">
-                System Online
-            </span>
-
-        </div>
-
+        <a href="/devices/create" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i>
+            Add Device
+        </a>
     </div>
 
     <!-- Statistics Cards -->
     <div class="row g-4 mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <small class="text-primary">Total Devices</small>
+                            <h2 class="fw-bold mt-2 text-primary">{{ stats.total_devices }}</h2>
+                        </div>
+                        <div class="fs-1 text-primary">
+                            <i class="bi bi-hdd-network"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        {% with
-            title="Total Devices",
-            value=total_devices,
-            icon="bi bi-hdd-network-fill",
-            subtitle="Registered devices"
-        %}
-            {% include "components/stat_card.html" %}
-        {% endwith %}
+        <div class="col-xl-3 col-md-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <small class="text-success">Online</small>
+                            <h2 class="fw-bold text-success mt-2">{{ stats.online_devices }}</h2>
+                        </div>
+                        <div class="fs-1 text-success">
+                            <i class="bi bi-wifi"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        {% with
-            title="Online Devices",
-            value=0,
-            icon="bi bi-wifi",
-            subtitle="Operational"
-        %}
-            {% include "components/stat_card.html" %}
-        {% endwith %}
+        <div class="col-xl-3 col-md-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <small class="text-danger">Offline</small>
+                            <h2 class="fw-bold text-danger mt-2">{{ stats.offline_devices }}</h2>
+                        </div>
+                        <div class="fs-1 text-danger">
+                            <i class="bi bi-wifi-off"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        {% with
-            title="Offline Devices",
-            value=0,
-            icon="bi bi-wifi-off",
-            subtitle="Require attention"
-        %}
-            {% include "components/stat_card.html" %}
-        {% endwith %}
-
-        {% with
-            title="Vendors",
-            value=0,
-            icon="bi bi-buildings-fill",
-            subtitle="Registered vendors"
-        %}
-            {% include "components/stat_card.html" %}
-        {% endwith %}
-
+        <div class="col-xl-3 col-md-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <small class="text-warning">Vendors</small>
+                            <h2 class="fw-bold mt-2 text-warning">{{ stats.vendors|length }}</h2>
+                        </div>
+                        <div class="fs-1 text-warning">
+                            <i class="bi bi-diagram-3"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Dashboard Content -->
+    <!-- Charts & Recent Devices -->
     <div class="row">
+        <!-- Vendor Chart -->
+        <div class="col-lg-7 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary">
+                    <h5 class="mb-0">Devices by Vendor</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="vendorChart" height="140"></canvas>
+                </div>
+            </div>
+        </div>
 
         <!-- Recent Devices -->
-        <div class="col-lg-8">
-
-            <div class="card">
-
-                <div class="card-header d-flex justify-content-between align-items-center">
-
-                    <h5 class="mb-0">
-                        Recent Devices
-                    </h5>
-
-                    <a href="/devices" class="btn btn-sm btn-primary">
-                        View All
-                    </a>
-
+        <div class="col-lg-5 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-success">
+                    <h5 class="mb-0">Recent Devices</h5>
                 </div>
-
                 <div class="card-body">
-
-                    <div class="table-responsive">
-
-                        <table class="table table-hover align-middle">
-
-                            <thead>
-
-                                <tr>
-
-                                    <th>Hostname</th>
-                                    <th>IP Address</th>
-                                    <th>Vendor</th>
-                                    <th>Type</th>
-
-                                </tr>
-
-                            </thead>
-
-                            <tbody>
-
-                                {% for device in devices[:5] %}
-
-                                <tr>
-
-                                    <td>{{ device.hostname }}</td>
-
-                                    <td>{{ device.ip_address }}</td>
-
-                                    <td>{{ device.vendor }}</td>
-
-                                    <td>{{ device.device_type }}</td>
-
-                                </tr>
-
-                                {% else %}
-
-                                <tr>
-
-                                    <td colspan="4" class="text-center py-4">
-
-                                        No devices found.
-
-                                    </td>
-
-                                </tr>
-
-                                {% endfor %}
-
-                            </tbody>
-
-                        </table>
-
+                    {% if stats.recent_devices %}
+                    <ul class="list-group list-group-flush">
+                        {% for device in stats.recent_devices %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>{{ device.hostname }}</strong>
+                                <br>
+                                <small class="text-muted">{{ device.ip_address }}</small>
+                            </div>
+                            <span class="badge bg-primary">{{ device.vendor }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-hdd-network fs-1 text-muted"></i>
+                        <p class="mt-3 text-muted">No devices registered yet.</p>
                     </div>
-
+                    {% endif %}
                 </div>
-
             </div>
-
         </div>
-
-        <!-- Quick Actions -->
-        <div class="col-lg-4">
-
-            <div class="card">
-
-                <div class="card-header">
-
-                    <h5 class="mb-0">
-                        Quick Actions
-                    </h5>
-
-                </div>
-
-                <div class="card-body d-grid gap-3">
-
-                    <a href="/devices/create" class="btn btn-primary">
-
-                        <i class="bi bi-plus-circle me-2"></i>
-
-                        Add Device
-
-                    </a>
-
-                    <button class="btn btn-success">
-
-                        <i class="bi bi-arrow-repeat me-2"></i>
-
-                        Scan Network
-
-                    </button>
-
-                    <button class="btn btn-warning">
-
-                        <i class="bi bi-download me-2"></i>
-
-                        Backup Configurations
-
-                    </button>
-
-                    <button class="btn btn-info text-white">
-
-                        <i class="bi bi-graph-up-arrow me-2"></i>
-
-                        Generate Report
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
     </div>
 
 </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const ctx = document.getElementById("vendorChart");
+
+new Chart(ctx, {
+    type: "doughnut",
+    data: {
+        labels: [
+            {% for vendor in stats.vendors.keys() %}
+                "{{ vendor }}",
+            {% endfor %}
+        ],
+        datasets: [{
+            data: [
+                {% for value in stats.vendors.values() %}
+                    {{ value }},
+                {% endfor %}
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: "bottom"
+            }
+        }
+    }
+});
+</script>
 
 {% endblock %}

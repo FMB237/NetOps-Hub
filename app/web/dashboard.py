@@ -11,16 +11,16 @@ templates = Jinja2Templates(directory="app/templates")
 
 @router.get("/")
 def dashboard(request: Request, db: Session = Depends(get_db)):
-    devices = device_service.get_devices(db)
-    total_devices = len(devices)
+    from app.services.dashboard_service import dashboard_service
 
+    stats = dashboard_service.get_dashboard_stats(db)
+    
     return templates.TemplateResponse(
-        request=request,
-        name="dashboard.html",
-        context={
-            "request": request,
-            "devices": devices,
-            "total_devices": total_devices,
-            "active_page": "dashboard"
-        },
-    )
+    request=request,
+    name="dashboard.html",
+    context={
+        "request": request,
+        "stats": stats,
+        "active_page": "dashboard",
+    },
+)
