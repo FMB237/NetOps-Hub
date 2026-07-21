@@ -10,4 +10,10 @@ router = APIRouter(prefix="/api/network",tags=["Network"])
 
 @router.post('/test',response_model=ConnectedTestResponse)
 def test_connection(request: ConnectedTestRequest):
-    return network_service.test_connection(request.ip_address,request.port)
+    
+     return network_service.test_connection(
+    request.ip_address,
+    request.port,
+    request.username,
+    request.password,
+)

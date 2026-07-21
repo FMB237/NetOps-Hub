@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-Add Device
+Register Device
 {% endblock %}
 
 {% block content %}
@@ -9,15 +9,20 @@ Add Device
 <div class="container-fluid">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
+
         <div>
+
             <h2 class="fw-bold">
                 <i class="bi bi-router-fill text-primary me-2"></i>
                 Register Network Device
             </h2>
-            <p class="text-muted mb-0">
-                Add a new network device to the NetOps Hub inventory.
+
+            <p class="text-muted">
+                Add a new device to your NetOps Hub inventory.
             </p>
+
         </div>
+
         <a href="/devices" class="btn btn-outline-secondary">
 
             <i class="bi bi-arrow-left"></i>
@@ -28,290 +33,7 @@ Add Device
 
     </div>
 
-    <form action="/devices/create" method="POST">
-        <div class="row">
-            <!-- LEFT COLUMN -->
-            <div class="col-lg-8">
-                <div class="card shadow-sm mb-4">
-                    <div class="card-header">
-                        <h5 class="mb-0">
-                            Device Information
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-
-                            <div class="col-md-6 mb-3">
-
-                                <label class="form-label">
-
-                                    Hostname
-
-                                </label>
-
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    name="hostname"
-                                    placeholder="Core-R1"
-                                    required>
-
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-
-                                <label class="form-label">
-
-                                    IP Address
-
-                                </label>
-
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    name="ip_address"
-                                    placeholder="192.168.1.1"
-                                    required>
-
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-
-                                <label class="form-label">
-
-                                    Vendor
-
-                                </label>
-
-                                <select
-                                    class="form-select"
-                                    name="vendor">
-
-                                    {% for vendor in vendors %}
-
-                                    <option value="{{ vendor.value }}">
-
-                                        {{ vendor.value }}
-
-                                    </option>
-
-                                    {% endfor %}
-
-                                </select>
-
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-
-                                <label class="form-label">
-
-                                    Device Type
-
-                                </label>
-
-                                <select
-                                    class="form-select"
-                                    name="device_type">
-
-                                    {% for device in device_types %}
-
-                                    <option value="{{ device.value }}">
-
-                                        {{ device.value }}
-
-                                    </option>
-
-                                    {% endfor %}
-
-                                </select>
-
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-
-                                <label class="form-label">
-
-                                    Model
-
-                                </label>
-
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    name="model"
-                                    placeholder="Catalyst 9300">
-
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-
-                                <label class="form-label">
-
-                                    Operating System
-
-                                </label>
-
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    name="operating_system"
-                                    placeholder="IOS-XE">
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <!-- RIGHT COLUMN -->
-
-            <div class="col-lg-4">
-
-                <div class="card shadow-sm mb-4">
-
-                    <div class="card-header">
-
-                        <h5 class="mb-0">
-
-                            SSH Configuration
-
-                        </h5>
-
-                    </div>
-
-                    <div class="card-body">
-
-                        <div class="mb-3">
-
-                            <label class="form-label">
-
-                                SSH Port
-
-                            </label>
-
-                            <input
-                                class="form-control"
-                                type="number"
-                                name="ssh_port"
-                                value="22">
-
-                        </div>
-
-                        <div class="mb-3">
-
-                            <label class="form-label">
-
-                                Username
-
-                            </label>
-
-                            <input
-                                class="form-control"
-                                name="username"
-                                placeholder="admin">
-
-                        </div>
-
-                        <div class="mb-3">
-
-    <label class="form-label">
-
-        Password
-
-    </label>
-
-    <input
-        type="password"
-        class="form-control"
-        name="password"
-        placeholder="SSH Password">
-
-</div>
-                        <div class="mb-3">
-
-                            <label class="form-label">
-
-                                Location
-
-                            </label>
-
-                            <input
-                                class="form-control"
-                                name="location"
-                                placeholder="Douala DC">
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="card shadow-sm">
-
-                    <div class="card-header">
-
-                        <h5 class="mb-0">
-
-                            Notes
-
-                        </h5>
-
-                    </div>
-
-                    <div class="card-body">
-
-                        <textarea
-                            class="form-control"
-                            rows="6"
-                            name="notes"
-                            placeholder="Additional information..."></textarea>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="d-flex justify-content-end mt-4">
-
-            <a
-                href="/devices"
-                class="btn btn-outline-secondary me-2">
-
-                Cancel
-
-            </a>
-
-            <div class="card mt-4">
-
-    <div class="card-body">
-
-        <button  id="testConnection" type="button" class="btn btn-warning w-100">
-            <i class="bi bi-wifi"></i>
-            Test Connection
-        </button>
-
-        <div id="connectionResult" class="mt-1">
-
-        </div>
-
-    </div>
-
-</div>
-            <button class="btn btn-primary" type="submit">
-                <i class="bi bi-check-circle-fill me-2"></i>
-                Register Device
-            </button>
-
-        </div>
-
-    </form>
+    {% include "devices/_form.html" %}
 
 </div>
 

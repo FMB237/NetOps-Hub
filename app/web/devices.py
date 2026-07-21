@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, Request,Form
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from fastapi.responses import RedirectResponse
+from uuid import UUID
 
 from app.database.database import get_db
 from app.services.device_service import device_service
@@ -82,3 +83,29 @@ def create_device(
         status_code=303,
     )
 
+
+# Let add and edit route 
+@router.get("/devices/{device_id}/edit")
+def edit_device_form(
+    device_id: UUID,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    device = device_service.get_device(
+        db,
+        device_id,
+    )
+
+    return templates.TemplateResponse(
+        request=request,
+        name="devices/edit.html",
+        context={
+            "request": request,
+            "device": device,
+            "vendors": Vendor,
+            "device_types": DeviceType,
+            "form_action": f"/devices/{device_id}/edit",
+            "submit_label": "Save Changes",
+            "active_page": "devices",
+        },
+    )

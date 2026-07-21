@@ -216,3 +216,10 @@ Now let update the create.html file  by adding a password field under the user f
 Then update the Network schema
 Build a real ssh connection using paramiko this is done inside the network_service.py file 
 
+
+
+Let update our code for devices editing using the edit.html inside the app/templates/device directory 
+- Step 1 let go add an edit button inside our templates/devices/index.html  
+- Step 2 we will create a new file inside the templates/devices/_form.html that will used but by the create.html and edit.html 
+- By moving the form inside the create.html and putting it inside the _form.html for then to reused so the create.html will become a small file 
+- 
