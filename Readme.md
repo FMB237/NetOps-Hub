@@ -222,4 +222,33 @@ Let update our code for devices editing using the edit.html inside the app/templ
 - Step 1 let go add an edit button inside our templates/devices/index.html  
 - Step 2 we will create a new file inside the templates/devices/_form.html that will used but by the create.html and edit.html 
 - By moving the form inside the create.html and putting it inside the _form.html for then to reused so the create.html will become a small file 
-- 
+
+Now that we are done with our Crud operation we can move on to another Sprint mainly Sprint 2 of our project 
+
+1. Search and Filter (The capacity to seatch and filter devices is to be added to our project to make it more realistic and attractive )
+2. After that we gonna add Pagination to the project for our devices inventory 
+3. Adding a Deviecs details page 
+4. Some Dashbord improvement for our app to be better mainly to show active and inactive devices 
+5. Then add the Ping devices and ssh connection 
+  
+  - Let start with the dashboard overhaul and it new structure for that we need to update all our dashbaord files that is dashboard.html,dashboard.py and add a dashboard_service.py into the services folder 
+- Sprint 2
+✅ Search devices
+✅ Filters (Vendor, Device Type)
+✅ Pagination
+✅ Device Details page
+✅ Dashboard statistics
+Sprint 3
+🔐 SSH with Netmiko
+🟢 Ping devices
+📋 Execute commands
+💾 Configuration backup
+🌐 Network discovery
+Sprint 4
+👥 User authentication
+🔑 Roles (Admin / Operator / Viewer)
+📈 Activity logs
+📊 Grafana-style monitoring
+🐳 Docker deployment
+🚀 CI/CD pipeline
+The only patten to follow now 
