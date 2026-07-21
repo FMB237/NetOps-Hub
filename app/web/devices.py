@@ -151,3 +151,21 @@ def update_device(
         url="/devices",
         status_code=303,
     )    
+
+
+# adding delete route 
+@router.post("/devices/{device_id}/delete")
+def delete_device(
+    device_id: UUID,
+    db: Session = Depends(get_db),
+):
+
+    device_service.delete_device(
+        db,
+        device_id,
+    )
+
+    return RedirectResponse(
+        url="/devices",
+        status_code=303,
+    )
