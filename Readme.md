@@ -252,3 +252,8 @@ Sprint 4
 🐳 Docker deployment
 🚀 CI/CD pipeline
 The only patten to follow now 
+
+
+Let add the search functionallities in our application this is just a simple function mainly done in Sprint 1
+Let move on to the device_repository.py file and update Let also update the device_service.py 
+Then also update the web router 

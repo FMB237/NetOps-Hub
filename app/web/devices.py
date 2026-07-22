@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Request,Form
+from fastapi import APIRouter, Depends, Request,Form,Query
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from fastapi.responses import RedirectResponse
@@ -15,23 +15,42 @@ router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
 
 
+
 @router.get("/devices")
 def list_devices(
     request: Request,
     db: Session = Depends(get_db),
+    search: str | None = Query(default=None),
+    vendor: Vendor | None = Query(default=None, description="Vendor", alias="vendor"),
+    device_type: DeviceType | None = Query(default=None, description="Device Type", alias="device_type"),
 ):
-    devices = device_service.get_devices(db)
+    # Fix: Convert empty string query params to None for Enum fields
+    if vendor == "":
+        vendor = None
+    if device_type == "":
+        device_type = None
 
+    devices = device_service.search_devices(
+        db,
+        search,
+        vendor,
+        device_type,
+    )
     return templates.TemplateResponse(
         request=request,
         name="devices/index.html",
         context={
             "request": request,
             "devices": devices,
+            "vendors": Vendor,
+            "device_types": DeviceType,
+            "search": search,
+            "selected_vendor": vendor,
+            "selected_type": device_type,
             "active_page": "devices",
         },
-    )
 
+    )
 
 @router.get("/devices/create")
 def create_device_form(
@@ -169,3 +188,5 @@ def delete_device(
         url="/devices",
         status_code=303,
     )
+
+

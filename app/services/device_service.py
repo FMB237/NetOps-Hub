@@ -37,6 +37,7 @@ class DeviceService:
         device = self.get_device(db,device_id)
 
         return device_repository.delete(db,device)                  
-
+    def search_devices(self,db: Session,search : str | None = None,vendor= None,device_type=None):
+        return device_repository.search(db,search,vendor,device_type,)
 
 device_service= DeviceService()
