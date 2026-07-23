@@ -21,14 +21,17 @@ def list_devices(
     request: Request,
     db: Session = Depends(get_db),
     search: str | None = Query(default=None),
-    vendor: Vendor | None = Query(default=None, description="Vendor", alias="vendor"),
-    device_type: DeviceType | None = Query(default=None, description="Device Type", alias="device_type"),
+    vendor: str | None = Query(default=None, description="Vendor", alias="vendor"),
+    device_type: str | None = Query(default=None, description="Device Type", alias="device_type"),
 ):
-    # Fix: Convert empty string query params to None for Enum fields
-    if vendor == "":
-        vendor = None
-    if device_type == "":
-        device_type = None
+    # Fix: Accept str, convert to Enum if not None or empty
+    vendor = vendor or None
+    device_type = device_type or None
+    from app.models.enums import Vendor, DeviceType
+    if vendor is not None:
+        vendor = Vendor(vendor)
+    if device_type is not None:
+        device_type = DeviceType(device_type)
 
     devices = device_service.search_devices(
         db,
@@ -172,7 +175,7 @@ def update_device(
     )    
 
 
-# adding delete route 
+# adding delete route
 @router.post("/devices/{device_id}/delete")
 def delete_device(
     device_id: UUID,
@@ -187,6 +190,28 @@ def delete_device(
     return RedirectResponse(
         url="/devices",
         status_code=303,
+    )
+
+
+# Device Details page
+@router.get("/devices/{device_id}")
+def device_details(
+    device_id: UUID,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    device = device_service.get_device(db, device_id)
+    if not device:
+        raise HTTPException(status_code=404, detail="Device not found")
+
+    return templates.TemplateResponse(
+        request=request,
+        name="devices/details.html",
+        context={
+            "request": request,
+            "device": device,
+            "active_page": "devices",
+        },
     )
 
 
