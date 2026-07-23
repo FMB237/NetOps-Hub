@@ -24,6 +24,14 @@ Device Details - {{ device.hostname }}
         </div>
 
         <div class="d-flex gap-2">
+            <button type="button" class="btn btn-success" onclick="pingDevice()">
+                <i class="bi bi-broadcast"></i>
+                Ping
+            </button>
+            <button type="button" class="btn btn-info" onclick="testSsh()">
+                <i class="bi bi-terminal"></i>
+                SSH Test
+            </button>
             <a href="/devices/{{ device.id }}/edit" class="btn btn-warning">
                 <i class="bi bi-pencil"></i>
                 Edit
@@ -132,9 +140,134 @@ Device Details - {{ device.hostname }}
                 </div>
             </div>
             {% endif %}
+
+            <!-- Connection Test Result Card -->
+            <div class="card shadow-sm mt-4" id="testResultCard" style="display: none;">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-lightning me-2"></i>
+                        Connection Test Result
+                    </h5>
+                </div>
+                <div class="card-body" id="testResultBody">
+                    <!-- Results will be shown here -->
+                </div>
+            </div>
         </div>
     </div>
 
 </div>
+
+<!-- Hidden form for SSH test -->
+<form id="sshTestForm" style="display: none;">
+    {% if device.username and device.username %}
+    <input type="hidden" id="sshUsername" value="{{ device.username }}">
+    <input type="hidden" id="sshPassword" value="">
+    {% endif %}
+</form>
+
+<script>
+const deviceIp = "{{ device.ip_address }}";
+const devicePort = {{ device.ssh_port }};
+
+async function pingDevice() {
+    const resultCard = document.getElementById('testResultCard');
+    const resultBody = document.getElementById('testResultBody');
+
+    resultBody.innerHTML = '<div class="text-center"><div class="spinner-border text-primary" role="status"></div><p class="mt-2">Pinging {{ device.ip_address }}...</p></div>';
+    resultCard.style.display = 'block';
+
+    try {
+        const response = await fetch('/api/network/ping', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ip_address: deviceIp, count: 4 })
+        });
+        const result = await response.json();
+
+        if (result.reachable) {
+            resultBody.innerHTML = `
+                <div class="alert alert-success">
+                    <h5><i class="bi bi-check-circle"></i> Device Reachable</h5>
+                    <p><strong>IP Address:</strong> ${deviceIp}</p>
+                    <p><strong>Latency:</strong> ${result.latency}</p>
+                    <p><strong>Packet Loss:</strong> ${result.packet_loss}%</p>
+                </div>
+            `;
+        } else {
+            resultBody.innerHTML = `
+                <div class="alert alert-danger">
+                    <h5><i class="bi bi-x-circle"></i> Device Unreachable</h5>
+                    <p><strong>IP Address:</strong> ${deviceIp}</p>
+                    <p><strong>Message:</strong> ${result.message}</p>
+                    <p><strong>Packet Loss:</strong> ${result.packet_loss}%</p>
+                </div>
+            `;
+        }
+    } catch (error) {
+        resultBody.innerHTML = `
+            <div class="alert alert-danger">
+                <h5><i class="bi bi-exclamation-triangle"></i> Error</h5>
+                <p>${error.message}</p>
+            </div>
+        `;
+    }
+}
+
+async function testSsh() {
+    const resultCard = document.getElementById('testResultCard');
+    const resultBody = document.getElementById('testResultBody');
+
+    const username = document.getElementById('sshUsername');
+    const password = prompt('Please enter SSH password for {{ device.username }}:');
+
+    if (!password) return;
+
+    resultBody.innerHTML = '<div class="text-center"><div class="spinner-border text-info" role="status"></div><p class="mt-2">Testing SSH connection to {{ device.ip_address }}...</p></div>';
+    resultCard.style.display = 'block';
+
+    try {
+        const response = await fetch('/api/network/test', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                ip_address: deviceIp,
+                port: devicePort,
+                username: username ? username.value : '{{ device.username }}',
+                password: password
+            })
+        });
+        const result = await response.json();
+
+        if (result.reachable) {
+            resultBody.innerHTML = `
+                <div class="alert alert-success">
+                    <h5><i class="bi bi-check-circle"></i> SSH Connection Successful</h5>
+                    <p><strong>IP Address:</strong> ${deviceIp}</p>
+                    <p><strong>Port:</strong> ${devicePort}</p>
+                    <p><strong>Latency:</strong> ${result.latency}</p>
+                    <p><strong>Hostname:</strong> ${result.hostname}</p>
+                </div>
+            `;
+        } else {
+            resultBody.innerHTML = `
+                <div class="alert alert-danger">
+                    <h5><i class="bi bi-x-circle"></i> SSH Connection Failed</h5>
+                    <p><strong>IP Address:</strong> ${deviceIp}</p>
+                    <p><strong>Port:</strong> ${devicePort}</p>
+                    <p><strong>Error:</strong> ${result.message}</p>
+                </div>
+            `;
+        }
+    } catch (error) {
+        resultBody.innerHTML = `
+            <div class="alert alert-danger">
+                <h5><i class="bi bi-exclamation-triangle"></i> Error</h5>
+                <p>${error.message}</p>
+            </div>
+        `;
+    }
+}
+</script>
 
 {% endblock %}
