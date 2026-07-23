@@ -46,11 +46,27 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                         <div>
-                            <small class="text-success">Online</small>
-                            <h2 class="fw-bold text-success mt-2">{{ stats.online_devices }}</h2>
+                            <small class="text-info">Device Types</small>
+                            <h2 class="fw-bold mt-2 text-info">{{ stats.device_types|length }}</h2>
+                        </div>
+                        <div class="fs-1 text-info">
+                            <i class="bi bi-layers"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <small class="text-success">Added This Week</small>
+                            <h2 class="fw-bold text-success mt-2">{{ stats.recently_added }}</h2>
                         </div>
                         <div class="fs-1 text-success">
-                            <i class="bi bi-wifi"></i>
+                            <i class="bi bi-plus-circle"></i>
                         </div>
                     </div>
                 </div>
@@ -62,27 +78,11 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                         <div>
-                            <small class="text-danger">Offline</small>
-                            <h2 class="fw-bold text-danger mt-2">{{ stats.offline_devices }}</h2>
-                        </div>
-                        <div class="fs-1 text-danger">
-                            <i class="bi bi-wifi-off"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-3 col-md-6">
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <small class="text-warning">Vendors</small>
-                            <h2 class="fw-bold mt-2 text-warning">{{ stats.vendors|length }}</h2>
+                            <small class="text-warning">Updated This Week</small>
+                            <h2 class="fw-bold text-warning mt-2">{{ stats.recently_updated }}</h2>
                         </div>
                         <div class="fs-1 text-warning">
-                            <i class="bi bi-diagram-3"></i>
+                            <i class="bi bi-pencil"></i>
                         </div>
                     </div>
                 </div>
@@ -93,10 +93,36 @@
     <!-- Charts & Recent Devices -->
     <div class="row">
         <!-- Vendor Chart -->
-        <div class="col-lg-7 mb-4">
+        <div class="col-lg-6 mb-4">
             <div class="card shadow-sm border-0">
                 <div class="card-header bg-primary">
                     <h5 class="mb-0">Devices by Vendor</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="vendorChart" height="140"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Device Type Chart -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-info">
+                    <h5 class="mb-0">Devices by Type</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="deviceTypeChart" height="140"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Devices -->
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-success">
+                    <h5 class="mb-0">Recent Devices</h5>
                 </div>
                 <div class="card-body">
                     <canvas id="vendorChart" height="140"></canvas>
@@ -144,9 +170,9 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-const ctx = document.getElementById("vendorChart");
-
-new Chart(ctx, {
+// Vendor Chart
+const vendorCtx = document.getElementById("vendorChart");
+new Chart(vendorCtx, {
     type: "doughnut",
     data: {
         labels: [
@@ -157,6 +183,34 @@ new Chart(ctx, {
         datasets: [{
             data: [
                 {% for value in stats.vendors.values() %}
+                    {{ value }},
+                {% endfor %}
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: "bottom"
+            }
+        }
+    }
+});
+
+// Device Type Chart
+const deviceTypeCtx = document.getElementById("deviceTypeChart");
+new Chart(deviceTypeCtx, {
+    type: "doughnut",
+    data: {
+        labels: [
+            {% for dtype in stats.device_types.keys() %}
+                "{{ dtype }}",
+            {% endfor %}
+        ],
+        datasets: [{
+            data: [
+                {% for value in stats.device_types.values() %}
                     {{ value }},
                 {% endfor %}
             ]
