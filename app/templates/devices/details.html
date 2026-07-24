@@ -12,9 +12,13 @@ Device Details - {{ device.hostname }}
 
         <div>
 
-            <h2 class="fw-bold">
+            <h2 class="fw-bold d-flex align-items-center">
                 <i class="bi bi-info-circle text-info me-2"></i>
                 {{ device.hostname }}
+                <span id="deviceStatus" class="badge bg-secondary ms-2">
+                    <i class="bi bi-circle-fill" style="font-size: 0.5rem;"></i>
+                    Click Ping to check
+                </span>
             </h2>
 
             <p class="text-muted">
@@ -23,7 +27,7 @@ Device Details - {{ device.hostname }}
 
         </div>
 
-        <div class="d-flex gap-2">
+        <div class="d-flex gap-2 flex-wrap">
             <button type="button" class="btn btn-success" onclick="pingDevice()">
                 <i class="bi bi-broadcast"></i>
                 Ping
@@ -32,7 +36,15 @@ Device Details - {{ device.hostname }}
                 <i class="bi bi-terminal"></i>
                 SSH Test
             </button>
-            <a href="/devices/{{ device.id }}/edit" class="btn btn-warning">
+            <a href="/devices/{{ device.id }}/execute" class="btn btn-primary">
+                <i class="bi bi-play"></i>
+                Execute
+            </a>
+            <a href="/devices/{{ device.id }}/backup" class="btn btn-warning">
+                <i class="bi bi-save"></i>
+                Backup
+            </a>
+            <a href="/devices/{{ device.id }}/edit" class="btn btn-secondary">
                 <i class="bi bi-pencil"></i>
                 Edit
             </a>
@@ -170,12 +182,28 @@ Device Details - {{ device.hostname }}
 const deviceIp = "{{ device.ip_address }}";
 const devicePort = {{ device.ssh_port }};
 
+function updateStatusBadge(online, latency) {
+    const statusBadge = document.getElementById('deviceStatus');
+    if (online) {
+        statusBadge.className = 'badge bg-success ms-2';
+        statusBadge.innerHTML = '<i class="bi bi-circle-fill" style="font-size: 0.5rem;"></i> Online ' + latency;
+    } else {
+        statusBadge.className = 'badge bg-danger ms-2';
+        statusBadge.innerHTML = '<i class="bi bi-circle-fill" style="font-size: 0.5rem;"></i> Offline';
+    }
+}
+
 async function pingDevice() {
     const resultCard = document.getElementById('testResultCard');
     const resultBody = document.getElementById('testResultBody');
 
     resultBody.innerHTML = '<div class="text-center"><div class="spinner-border text-primary" role="status"></div><p class="mt-2">Pinging {{ device.ip_address }}...</p></div>';
     resultCard.style.display = 'block';
+
+    // Update status to checking
+    const statusBadge = document.getElementById('deviceStatus');
+    statusBadge.className = 'badge bg-warning ms-2';
+    statusBadge.innerHTML = '<i class="bi bi-circle-fill" style="font-size: 0.5rem;"></i> Checking...';
 
     try {
         const response = await fetch('/api/network/ping', {
@@ -186,6 +214,7 @@ async function pingDevice() {
         const result = await response.json();
 
         if (result.reachable) {
+            updateStatusBadge(true, result.latency);
             resultBody.innerHTML = `
                 <div class="alert alert-success">
                     <h5><i class="bi bi-check-circle"></i> Device Reachable</h5>
@@ -195,6 +224,7 @@ async function pingDevice() {
                 </div>
             `;
         } else {
+            updateStatusBadge(false, null);
             resultBody.innerHTML = `
                 <div class="alert alert-danger">
                     <h5><i class="bi bi-x-circle"></i> Device Unreachable</h5>
@@ -205,6 +235,7 @@ async function pingDevice() {
             `;
         }
     } catch (error) {
+        updateStatusBadge(false, null);
         resultBody.innerHTML = `
             <div class="alert alert-danger">
                 <h5><i class="bi bi-exclamation-triangle"></i> Error</h5>

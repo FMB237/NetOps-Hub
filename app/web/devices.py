@@ -71,7 +71,7 @@ def create_device_form(
     )
 
 
-    # adding the post request 
+    # adding the post request
 @router.post("/devices/create")
 def create_device(
     hostname: str = Form(...),
@@ -82,6 +82,7 @@ def create_device(
     operating_system: str = Form(...),
     ssh_port: int = Form(22),
     username: str | None = Form(None),
+    password: str | None = Form(None),
     location: str | None = Form(None),
     notes: str | None = Form(None),
     db: Session = Depends(get_db),
@@ -95,6 +96,7 @@ def create_device(
         operating_system=operating_system,
         ssh_port=ssh_port,
         username=username,
+        password=password,
         location=location,
         notes=notes,
     )
@@ -133,7 +135,7 @@ def edit_device_form(
         },
     )
 
-# let add a post request for editing 
+# let add a post request for editing
 @router.post("/devices/{device_id}/edit")
 def update_device(
     device_id: UUID,
@@ -145,6 +147,7 @@ def update_device(
     operating_system: str = Form(...),
     ssh_port: int = Form(22),
     username: str | None = Form(None),
+    password: str | None = Form(None),
     location: str | None = Form(None),
     notes: str | None = Form(None),
     db: Session = Depends(get_db),
@@ -159,6 +162,7 @@ def update_device(
         operating_system=operating_system,
         ssh_port=ssh_port,
         username=username,
+        password=password,
         location=location,
         notes=notes,
     )

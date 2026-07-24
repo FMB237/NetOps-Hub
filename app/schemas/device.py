@@ -22,6 +22,7 @@ class DeviceBase(BaseModel):
     operating_system: str = Field(..., max_length=100)
     ssh_port: int = Field(default=22, ge=1, le=65535)
     username: str | None = None
+    password: str | None = None
     location: str | None = None
     notes: str | None = None
 
@@ -41,6 +42,7 @@ class DeviceUpdate(BaseModel):
     operating_system: str | None = None
     ssh_port: int | None = None
     username: str | None = None
+    password: str | None = None
     location: str | None = None
     notes: str | None = None
 

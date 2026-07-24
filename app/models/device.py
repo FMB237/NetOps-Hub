@@ -61,6 +61,10 @@ class Device(Base):
         String(100),
         nullable=True,
     )
+    password : Mapped[str | None] = mapped_column(
+        String(255),
+        nullable=True,
+    )
     location : Mapped[str | None] = mapped_column(
         String(255),
         nullable=True,
