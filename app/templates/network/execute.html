@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block title %}
+Execute Command - {{ device.hostname }}
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+                <i class="bi bi-terminal text-success me-2"></i>
+                Execute Command
+            </h2>
+
+            <p class="text-muted">
+                Run a command on {{ device.hostname }} ({{ device.ip_address }})
+            </p>
+
+        </div>
+
+        <a href="/devices/{{ device.id }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i>
+            Back to Device
+        </a>
+
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-terminal me-2"></i>
+                        Command Execution
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form id="commandForm">
+                        <div class="mb-3">
+                            <label class="form-label">Device</label>
+                            <input type="text" class="form-control" value="{{ device.hostname }} ({{ device.ip_address }})" readonly>
+                            <input type="hidden" id="deviceIp" value="{{ device.ip_address }}">
+                            <input type="hidden" id="devicePort" value="{{ device.ssh_port }}">
+                            <input type="hidden" id="deviceUsername" value="{{ device.username or '' }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Command</label>
+                            <input type="text" class="form-control" id="command" placeholder="e.g., show version, show ip interface brief" value="show version">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">SSH Password</label>
+                            <input type="password" class="form-control" id="password" placeholder="Enter SSH password">
+                        </div>
+
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-play-fill"></i>
+                            Execute
+                        </button>
+                    </form>
+
+                    <div id="resultArea" class="mt-4" style="display: none;">
+                        <h5>Result:</h5>
+                        <pre id="resultOutput" class="bg-dark text-light p-3 rounded" style="white-space: pre-wrap; word-wrap: break-word;"></pre>
+                    </div>
+
+                    <div id="loadingArea" class="text-center mt-4" style="display: none;">
+                        <div class="spinner-border text-success" role="status"></div>
+                        <p class="mt-2">Executing command...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-lightbulb me-2"></i>
+                        Common Commands
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong>show version</strong> - Device information
+                        </li>
+                        <li class="list-group-item">
+                            <strong>show ip interface brief</strong> - Interface status
+                        </li>
+                        <li class="list-group-item">
+                            <strong>show running-config</strong> - Current config
+                        </li>
+                        <li class="list-group-item">
+                            <strong>show vlan</strong> - VLAN information
+                        </li>
+                        <li class="list-group-item">
+                            <strong>show ip route</strong> - Routing table
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+document.getElementById('commandForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const deviceIp = document.getElementById('deviceIp').value;
+    const devicePort = document.getElementById('devicePort').value;
+    const deviceUsername = document.getElementById('deviceUsername').value;
+    const password = document.getElementById('password').value;
+    const command = document.getElementById('command').value;
+
+    if (!password) {
+        alert('Please enter SSH password');
+        return;
+    }
+
+    document.getElementById('resultArea').style.display = 'none';
+    document.getElementById('loadingArea').style.display = 'block';
+
+    try {
+        const response = await fetch('/api/network/execute', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                ip_address: deviceIp,
+                port: parseInt(devicePort),
+                username: deviceUsername,
+                password: password,
+                command: command
+            })
+        });
+        const result = await response.json();
+
+        document.getElementById('loadingArea').style.display = 'none';
+        document.getElementById('resultArea').style.display = 'block';
+
+        if (result.success) {
+            document.getElementById('resultOutput').textContent = result.output || 'Command executed successfully (no output)';
+            document.getElementById('resultOutput').classList.remove('text-danger');
+            document.getElementById('resultOutput').classList.add('text-light');
+        } else {
+            document.getElementById('resultOutput').textContent = 'Error: ' + (result.error || 'Unknown error');
+            document.getElementById('resultOutput').classList.remove('text-light');
+            document.getElementById('resultOutput').classList.add('text-danger');
+        }
+    } catch (error) {
+        document.getElementById('loadingArea').style.display = 'none';
+        document.getElementById('resultArea').style.display = 'block';
+        document.getElementById('resultOutput').textContent = 'Error: ' + error.message;
+    }
+});
+</script>
+
+{% endblock %}
