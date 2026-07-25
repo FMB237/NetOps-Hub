@@ -7,7 +7,8 @@ from fastapi import HTTPException
 
 from app.database.database import get_db
 from app.services.device_service import device_service
-from app.models.enums import Vendor, DeviceType
+from app.services.activity_service import activity_service
+from app.models.enums import Vendor, DeviceType, ActivityType, ActivityLevel
 from app.schemas.device import DeviceCreate,DeviceUpdate
 
 router = APIRouter()
@@ -101,7 +102,18 @@ def create_device(
         notes=notes,
     )
 
-    device_service.create_device(db, device)
+    new_device = device_service.create_device(db, device)
+
+    # Log the activity
+    activity_service.log_activity(
+        db=db,
+        activity_type=ActivityType.DEVICE_CREATED,
+        message=f"Device '{hostname}' created with IP {ip_address}",
+        level=ActivityLevel.INFO,
+        device_id=new_device.id,
+        device_hostname=hostname,
+        ip_address="127.0.0.1",
+    )
 
     return RedirectResponse(
         url="/devices",
@@ -173,6 +185,17 @@ def update_device(
         device,
     )
 
+    # Log the activity
+    activity_service.log_activity(
+        db=db,
+        activity_type=ActivityType.DEVICE_UPDATED,
+        message=f"Device '{hostname}' updated",
+        level=ActivityLevel.INFO,
+        device_id=device_id,
+        device_hostname=hostname,
+        ip_address="127.0.0.1",
+    )
+
     return RedirectResponse(
         url="/devices",
         status_code=303,
@@ -185,10 +208,24 @@ def delete_device(
     device_id: UUID,
     db: Session = Depends(get_db),
 ):
+    # Get device info before deleting
+    device = device_service.get_device(db, device_id)
+    hostname = device.hostname if device else "Unknown"
 
     device_service.delete_device(
         db,
         device_id,
+    )
+
+    # Log the activity
+    activity_service.log_activity(
+        db=db,
+        activity_type=ActivityType.DEVICE_DELETED,
+        message=f"Device '{hostname}' deleted",
+        level=ActivityLevel.INFO,
+        device_id=device_id,
+        device_hostname=hostname,
+        ip_address="127.0.0.1",
     )
 
     return RedirectResponse(

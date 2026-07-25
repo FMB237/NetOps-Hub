@@ -1,11 +1,15 @@
 # Network API router
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Query, Depends
 from pydantic import BaseModel
 from typing import Optional
+from sqlalchemy.orm import Session
 
+from app.database.database import get_db
 from app.automation.ping import ping_automation
 from app.automation.ssh import ssh_automation
 from app.automation.backup import backup_automation
+from app.services.activity_service import activity_service
+from app.models.enums import ActivityType, ActivityLevel
 
 router = APIRouter(prefix="/api/network", tags=["Network"])
 
