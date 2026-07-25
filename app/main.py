@@ -9,6 +9,7 @@ from app.api.device_router import router as device_api
 from app.web.dashboard import router as dashboard_router
 from app.web.devices import router as devices_router
 from app.web.network import router as network_web_router
+from app.web.activity import router as activity_web_router
 from app.api.network_router import router as network_router
 from app.api.activity_router import router as activity_router
 
@@ -27,6 +28,7 @@ app.include_router(device_api) # Devices Router
 app.include_router(dashboard_router)
 app.include_router(devices_router)
 app.include_router(network_web_router)
+app.include_router(activity_web_router)
 app.include_router(network_router)
 app.include_router(activity_router)
 
