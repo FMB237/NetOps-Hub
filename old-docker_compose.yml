@@ -1,28 +1,23 @@
 version: "3.9"
 
 services:
-  app:
-    build: .
-    ports:
-      - "8000:8000"
-    env_file:
-      - .env
-    depends_on:
-      - postgres
-    volumes:
-      - ./:/app
-      - ./app/backups:/app/backups
 
   postgres:
-    image: postgres:16-alpine
+    image: postgres:16-alpine                            
     container_name: netops-postgres
+
     restart: unless-stopped
+
     env_file:
       - .env
+
     ports:
       - "5434:5432"
+
     volumes:
       - postgres_netops_data:/var/lib/postgresql/data
 
 volumes:
   postgres_netops_data:
+
+# This file only includes the database Service 
