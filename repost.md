@@ -1,4 +1,5 @@
-# NetHub-Ops Internship Report  
+# NetHub-Ops Internship Report
+
 **Internship Program**: Progre Internship  
 **Project**: NetHub-Ops – Professional Network Management Software  
 **Intern**: FMB237  
@@ -8,7 +9,8 @@
 
 ---
 
-## Executive Summary  
+## Executive Summary
+
 NetHub-Ops is a professional network management platform developed during the Progre Internship to streamline device monitoring, configuration management, and network operations. Built using **FastAPI (backend)**, **PostgreSQL 
 (database)**, and a **Jinja2/Bootstrap frontend**, the project follows a 7-sprint agile roadmap to deliver enterprise-grade features including device lifecycle management, SSH-based diagnostics, configuration backups, and 
 cloud-native deployment readiness.  
@@ -18,31 +20,38 @@ principles**, ensuring maintainability, testability, and scalability — exceedi
 
 ---
 
-## 1. Project Overview  
-### 1.1 Objective  
+## 1. Project Overview
+
+### 1.1 Objective
+
 To develop a centralized network operations platform that:  
+
 - Centralizes network device inventory (vendors, models, IPs, locations)  
 - Automates routine tasks (ping checks, SSH connectivity, config backups)  
 - Provides real-time dashboard visibility  
 - Enables DevOps-ready deployment via containers and IaC  
 
-### 1.2 Technical Stack  
-| **Layer**       | **Technology**                                  | **Purpose**                                      |  
-|------------------|------------------------------------------------|--------------------------------------------------|  
-| **Backend**      | FastAPI (Python 3.12), SQLAlchemy, Pydantic    | RESTful API, ORM, data validation                |  
-| **Database**     | PostgreSQL (via Docker)                        | Persistent device/activity storage               |  
-| **Frontend**     | Jinja2 Templates, HTML5, Bootstrap 5, Vanilla JS | Dynamic UI with modular components               |  
-| **Automation**   | Paramiko, ICMP ping                            | SSH connectivity, network diagnostics            |  
-| **DevOps**       | Docker, Docker Compose                         | Containerized dev/prod parity                    |  
-| **Styling**      | Custom CSS (BEM methodology)                   | Modular, maintainable styling                    |  
-| **Testing**      | (Planned: pytest, TestClient)                  | API/unit testing foundation                      |  
+### 1.2 Technical Stack
+
+| **Layer**      | **Technology**                                   | **Purpose**                           |
+| -------------- | ------------------------------------------------ | ------------------------------------- |
+| **Backend**    | FastAPI (Python 3.12), SQLAlchemy, Pydantic      | RESTful API, ORM, data validation     |
+| **Database**   | PostgreSQL (via Docker)                          | Persistent device/activity storage    |
+| **Frontend**   | Jinja2 Templates, HTML5, Bootstrap 5, Vanilla JS | Dynamic UI with modular components    |
+| **Automation** | Paramiko, ICMP ping                              | SSH connectivity, network diagnostics |
+| **DevOps**     | Docker, Docker Compose                           | Containerized dev/prod parity         |
+| **Styling**    | Custom CSS (BEM methodology)                     | Modular, maintainable styling         |
+| **Testing**    | (Planned: pytest, TestClient)                    | API/unit testing foundation           |
 
 ---
 
-## 2. Implementation Progress (Sprints 1–5)  
-### Sprint 1: Foundation & Architecture  
+## 2. Implementation Progress (Sprints 1–5)
+
+### Sprint 1: Foundation & Architecture
+
 **Goals**: Project setup, DB config, models, dashboard layout.  
 **Achievements**:  
+
 - Initialized FastAPI project with modular structure (`app/` directory)  
 - Configured PostgreSQL via Docker (`docker-compose.yml` for external DB)  
 - Defined SQLAlchemy models (`app/models/device.py`, `activity.py`) and enums (`app/enums.py`) for vendor/device-type safety  
@@ -52,9 +61,11 @@ To develop a centralized network operations platform that:
 
 **Key Insight**: Early investment in architecture (repositories, services, schemas) prevented technical debt — critical for Sprint 2+ scalability.  
 
-### Sprint 2: Device Lifecycle Management  
+### Sprint 2: Device Lifecycle Management
+
 **Goals**: Device CRUD, search/filter.  
 **Achievements**:  
+
 - **API Layer**: `app/api/device_router.py` with full CRUD endpoints (`/devices`)  
 - **Service Layer**: `app/services/device_service.py` handling business logic (validation, enrichment)  
 - **Repository Layer**: `app/repositories/device_repository.py` isolating SQLAlchemy ops  
@@ -69,15 +80,18 @@ To develop a centralized network operations platform that:
 **Challenge**: Avoiding tight coupling between web layer (`app/web/devices.py`) and API layer.  
 **Solution**: Web handlers call `device_service.py` directly — **no direct API calls** — preserving separation of concerns.  
 
-### Sprint 3: Network Diagnostics (Ping/SSH)  
+### Sprint 3: Network Diagnostics (Ping/SSH)
+
 **Goals**: Ping functionality, SSH connectivity testing.  
 **Achievements**:  
+
 - Created `app/automation/` module for low-level network ops:  
   - `ping.py`: ICMP sweep using `pythonping` (async-safe)  
   - `ssh.py`: Paramiko-based SSH connection with command execution  
   - `backup.py`: Config backup via Netmiko (planned for Sprint 4)  
 - Integrated into `app/services/network_service.py`:  
-  ```python  
+  
+  ```python
   # Example: SSH connectivity test  
   async def test_ssh_connectivity(device: Device) -> dict:  
       try:  
@@ -91,15 +105,17 @@ To develop a centralized network operations platform that:
           return {"status": "success", "output": conn.exec_command("show version")}  
       except Exception as e:  
           return {"status": "failed", "error": str(e)}  
-  ```  
+  ```
 - Exposed via `app/api/network_router.py` (`POST /network/test-ssh`)  
 - Frontend: Async AJAX calls (`static/js/dashboard.js`) to update device status badges without page reload  
 
 **Security Note**: Passwords stored temporarily in plaintext (Sprint 4 will add encryption via `cryptography` lib).  
 
-### Sprint 4: Configuration Backup & Activity Logging  
+### Sprint 4: Configuration Backup & Activity Logging
+
 **Goals**: Netmiko-based backups, activity tracking.  
 **Achievements**:  
+
 - **Config Backup**:  
   - `app/automation/backup.py`: Netmiko-driven config retrieval (supports Cisco/Juniper/Arista via device vendor enum)  
   - Backups stored in `app/backups/` with timestamped filenames (`{hostname}_YYYYMMDDHHMMSS.cfg`)  
@@ -110,20 +126,24 @@ To develop a centralized network operations platform that:
   - Frontend: `templates/activity/logs.html` with paginated table (Bootstrap)  
 - **Integration**: Backup/service calls triggered from device detail page (`templates/devices/details.html`)  
 
-### Sprint 5: Dockerization  
+### Sprint 5: Dockerization
+
 **Goals**: Containerize app for consistent dev/prod environments.  
 **Achievements**:  
+
 - **Dockerfile**:  
-  ```dockerfile  
+  
+  ```dockerfile
   FROM python:3.12-slim  
   WORKDIR /app  
   COPY requirement.txt .  
   RUN pip install --no-cache-dir -r requirement.txt  
   COPY . .  
   CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]  
-  ```  
+  ```
 - **docker-compose.yml**:  
-  ```yaml  
+  
+  ```yaml
   services:  
     db:  
       image: postgres:15  
@@ -143,7 +163,7 @@ To develop a centralized network operations platform that:
         - DATABASE_URL=postgresql://user:pass@db:5432/nethub  
   volumes:  
     postgres_data:  
-  ```  
+  ```
 - **Key Improvements**:  
   - `.venv` excluded via `.gitignore` (relying on Docker for deps)  
   - `requirement.txt` (note: renamed to `requirements.txt` in final commit for std compliance)  
@@ -151,8 +171,10 @@ To develop a centralized network operations platform that:
 
 ---
 
-## 3. Technical Highlights & Best Practices  
-### 3.1 Architecture Excellence  
+## 3. Technical Highlights & Best Practices
+
+### 3.1 Architecture Excellence
+
 - **Strict Layer Separation**:  
   `Web Layer` (Jinja2 routes) → `API Layer` (FastAPI routers) → `Service Layer` (business logic) → `Repository Layer` (DB access) → `Models` (ORM)  
   → *Zero circular dependencies; services never import routers/models directly.*  
@@ -160,18 +182,21 @@ To develop a centralized network operations platform that:
 - **Enum-Driven Safety**: Vendor/device-type enums (`app/enums.py`) prevent invalid DB values and drive UI dropdowns.  
 - **Template Inheritance**: `base.html` + modular components (`navbar.html`, `sidebar.html`, `stat_card.html`) eliminate UI duplication.  
 
-### 3.2 DevOps Maturity  
+### 3.2 DevOps Maturity
+
 - **Environment Parity**: Docker Compose mirrors prod-like PostgreSQL setup locally.  
 - **Config Separation**: `app/database/config.py` uses `pydantic.BaseSettings` for env-driven config (ready for Kubernetes secrets).  
 - **Build Automation**: `run.sh` simplifies dev setup:  
-  ```bash  
+  
+  ```bash
   #!/bin/bash  
   docker-compose up -d db  
   sleep 5  # Wait for DB ready  
   uvicorn app.main:app --reload --host 0.0.0.0 --port 8000  
-  ```  
+  ```
 
-### 3.3 Frontend Engineering  
+### 3.3 Frontend Engineering
+
 - **Component-Based Jinja2**: Reusable `stat_card.html` for dashboard metrics (CPU, device count, etc.).  
 - **Modular JS**: Feature-specific files (`device_create.js`, `sidebar.js`) bundled via `app.js`.  
 - **Responsive Design**: Bootstrap 5 grid + custom CSS (`sidebar.css`, `navbar.css`) for mobile/admin views.  
@@ -179,19 +204,22 @@ To develop a centralized network operations platform that:
 
 ---
 
-## 4. Challenges & Solutions  
-| **Challenge**                          | **Solution**                                                                 | **Outcome**                                      |  
-|----------------------------------------|------------------------------------------------------------------------------|--------------------------------------------------|  
-| **Circular imports** (services → models) | Used `TYPE_CHECKING` + forward references in Pydantic/SQLAlchemy models      | Clean import graph; no runtime errors            |  
-| **SSH blocking in async FastAPI**       | Wrapped Paramiko in `asyncio.to_thread()` (Python 3.9+)                      | Non-blocking SSH tests; UI remains responsive    |  
-| **CSS specificity conflicts**           | Adopted BEM naming (`block__element--modifier`) in custom CSS                | Predictable styling; no `!important` overrides   |  
-| **Enum serialization in Pydantic**      | Used `@validator` + `pre=True` to convert enum values to strings for JSON    | Clean API responses (`"vendor": "cisco"`)        |  
-| **Docker volume permissions**           | Added `user: "${UID}:${GID}"` in `docker-compose.yml` (via `.env`)           | Seamless file backup writes to host machine      |  
+## 4. Challenges & Solutions
+
+| **Challenge**                            | **Solution**                                                              | **Outcome**                                    |
+| ---------------------------------------- | ------------------------------------------------------------------------- | ---------------------------------------------- |
+| **Circular imports** (services → models) | Used `TYPE_CHECKING` + forward references in Pydantic/SQLAlchemy models   | Clean import graph; no runtime errors          |
+| **SSH blocking in async FastAPI**        | Wrapped Paramiko in `asyncio.to_thread()` (Python 3.9+)                   | Non-blocking SSH tests; UI remains responsive  |
+| **CSS specificity conflicts**            | Adopted BEM naming (`block__element--modifier`) in custom CSS             | Predictable styling; no `!important` overrides |
+| **Enum serialization in Pydantic**       | Used `@validator` + `pre=True` to convert enum values to strings for JSON | Clean API responses (`"vendor": "cisco"`)      |
+| **Docker volume permissions**            | Added `user: "${UID}:${GID}"` in `docker-compose.yml` (via `.env`)        | Seamless file backup writes to host machine    |
 
 ---
 
-## 5. Skills & Competencies Developed  
-### Technical  
+## 5. Skills & Competencies Developed
+
+### Technical
+
 - **Backend**: Advanced FastAPI (dependency injection, routers, Pydantic v2), SQLAlchemy 2.0 patterns, async I/O for I/O-bound tasks.  
 - **DevOps**: Docker Compose networking, volume management, multi-container orchestration prep.  
 - **Frontend**: Jinja2 templating best practices, modular CSS/JS, Bootstrap 5 extension, vanilla JS AJAX patterns.  
@@ -199,7 +227,8 @@ To develop a centralized network operations platform that:
 - **Database**: PostgreSQL schema design (timestamps, UUIDs, enums), connection pooling.  
 - **Professional**: Agile sprint planning, technical documentation (this report + `README.md`), defensive coding.  
 
-### Soft Skills  
+### Soft Skills
+
 - **Technical Writing**: Clear commit messages, inline docstrings, and this report.  
 - **Problem Decomposition**: Breaking network automation into reusable services (SSH/ping/backup).  
 - **Quality Focus**: Prioritizing testability and separation of features over rapid "it works" solutions.  
@@ -207,9 +236,12 @@ To develop a centralized network operations platform that:
 
 ---
 
-## 6. Conclusion & Future Work (Sprints 6–7)  
-### 6.1 Achievements  
+## 6. Conclusion & Future Work (Sprints 6–7)
+
+### 6.1 Achievements
+
 NetHub-Ops delivers a **production-ready foundation** for network operations:  
+
 - ✅ Full device lifecycle management (CRUD + search/filter)  
 - ✅ Real-time network diagnostics (ping/SSH)  
 - ✅ Configuration backup pipeline  
@@ -217,7 +249,8 @@ NetHub-Ops delivers a **production-ready foundation** for network operations:
 - ✅ DevOps-ready containerization  
 - ✅ Enterprise-grade architecture (testable, maintainable, scalable)  
 
-### 6.2 Upcoming Work (Sprints 6–7)  
+### 6.2 Upcoming Work (Sprints 6–7)
+
 - **Sprint 6 (CI/CD)**:  
   - Implement GitHub Actions pipeline (`lint` → `test` → `build` → `deploy to staging`)  
   - Add `pytest` suite for API/repositories (target: 80%+ coverage)  
@@ -226,17 +259,19 @@ NetHub-Ops delivers a **production-ready foundation** for network operations:
   - Provision infrastructure with Terraform (AWS/EKS or local k3s)  
   - Add Prometheus/Grafana integration for device metrics  
 
-### 6.3 Final Reflection  
+### 6.3 Final Reflection
+
 This internship transformed theoretical knowledge into tangible engineering practice. By prioritizing **architecture over speed** and **maintainability over shortcuts**, NetHub-Ops transcends a typical internship project — it is a 
 demonstrable foundation for a professional network operations platform. The structured approach ensures Sprints 6–7 will focus on *polish and scalability*, not fundamental rework.  
 
 ---  
+
 *Prepared by: FMB237*  
 *Progre Internship Cohort*  
 *[Date]*  
 *GitHub: [github.com/FMB237/NetHub-Ops](https://github.com/FMB237/NetHub-Ops) (hypothetical)*  
 
 ---  
-> **Note**: This report reflects progress through Sprint 5 (Dockerization complete). Sprints 6–7 are projected based on the original 7-sprint plan outlined in `Readme.md`. All code referenced exists in the project structure shared 
-earlier.  
 
+> **Note**: This report reflects progress through Sprint 5 (Dockerization complete). Sprints 6–7 are projected based on the original 7-sprint plan outlined in `Readme.md`. All code referenced exists in the project structure shared 
+> earlier.  
