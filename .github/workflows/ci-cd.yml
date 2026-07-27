@@ -54,6 +54,7 @@ jobs:
       - name: 🔬 Run Tests
         env:
           DATABASE_URL: postgresql://netops_admin:netops_password@localhost:5432/netops_hub
+          PYTHONPATH: ${{ github.workspace }}:$PYTHONPATH
         run: |
           pytest tests/ -v --tb=short
 
