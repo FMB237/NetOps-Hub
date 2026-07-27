@@ -4,15 +4,11 @@ name: CI/CD Pipeline
 on:
   # Run on pushes to main and develop branches
   push:
-    branches:
-      - main
-      - develop
+    branches: [ main, develop ]
 
   # Run on pull requests targeting main or develop
   pull_request:
-    branches:
-      - main
-      - develop
+    branches: [ main, develop ]
 
   # Allow manual triggering from the Actions tab
   workflow_dispatch:
@@ -33,7 +29,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-          cache: pip
+          cache: 'pip'
 
       - name: 📦 Install Dependencies
         run: |
@@ -50,10 +46,8 @@ jobs:
   # ==============================================
   build-and-push:
     name: 🐳 Build & Push Docker Image
-    needs: test
+    needs: test  # Only runs if test job succeeds
     runs-on: ubuntu-latest
-
-    # Only build when pushing to the main branch
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     steps:
@@ -63,7 +57,7 @@ jobs:
       - name: 🟢 Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "24"
+          node-version: '24'
 
       - name: 🔧 Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
