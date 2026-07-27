@@ -11,8 +11,9 @@ A professional network management system built with FastAPI, PostgreSQL, and mod
 | **Sprint 3** | Network Automation | ✅ Completed |
 | **Sprint 4** | Configuration Backup & Activity Logging | ✅ Completed |
 | **Sprint 5** | Dockerization | ✅ Completed |
-| **Sprint 6** | CI/CD Pipeline | ⏳ In Progress |
-| **Sprint 7** | Kubernetes & Terraform | ⚪ Not Started |
+| **Sprint 6** | GitHub Actions CI/CD Pipeline | ✅ Completed |
+| **Sprint 7** | Kubernetes Deployment | ⚪ Not Started |
+| **Sprint 8** | Terraform Integration | ⚪ Not Started |
 
 ## ✨ Features Implemented
 
@@ -27,6 +28,7 @@ A professional network management system built with FastAPI, PostgreSQL, and mod
 - **Activity Tracking**: Comprehensive audit trail of all user and system actions
 - **Responsive Dashboard**: Real-time statistics and visualizations
 - **Multi-language Support**: Clean, internationalized interface
+- **Continuous Integration/Deployment**: Automated testing, Docker image building, and pushing to Docker Hub via GitHub Actions
 
 ### Technical Architecture
 - **Backend**: FastAPI (Python 3.12)
@@ -35,6 +37,9 @@ A professional network management system built with FastAPI, PostgreSQL, and mod
 - **Authentication**: Session-based (extensible)
 - **API**: RESTful endpoints with automatic OpenAPI documentation
 - **Containerization**: Docker and Docker-Compose ready
+- **CI/CD**: GitHub Actions for automated testing and Docker image publishing (Completed!)
+- **Orchestration**: Kubernetes (planned)
+- **Infrastructure as Code**: Terraform (planned)
 - **Monitoring**: Integrated activity logging and system metrics
 
 ## 📸 Screenshots
@@ -77,7 +82,7 @@ A professional network management system built with FastAPI, PostgreSQL, and mod
 
 ### DevOps & Infrastructure
 - **Containerization**: Docker & Docker-Compose
-- **CI/CD**: GitHub Actions (in progress)
+- **CI/CD**: GitHub Actions (Completed!)
 - **Orchestration**: Kubernetes (planned)
 - **Infrastructure as Code**: Terraform (planned)
 
@@ -96,6 +101,11 @@ NetOps-Hub/
 │   └── web/                 # Web route handlers
 ├── backups/                 # Configuration backup storage
 ├── project_images/          # Screenshots for documentation
+├── tests/                   # Test files
+│   └── test_api.py          # Basic API tests
+├── .github/
+│   └── workflows/
+│       └── ci-cd.yml        # GitHub Actions CI/CD workflow
 ├── .dockerignore            # Docker build exclusions
 ├── .env                     # Environment variables
 ├── .env.example             # Environment template
@@ -175,16 +185,51 @@ Once the application is running, access the interactive API documentation at:
 
 Run the test suite:
 ```bash
-# With Docker
-docker-compose exec app pytest
-
+# With Docker (CI/CD pipeline runs tests automatically)
 # Local
 pytest
 ```
 
+## 🔄 GitHub Actions CI/CD Pipeline
+
+The project includes a fully automated CI/CD pipeline that:
+1. **Triggers**: Runs on pushes to main/develop branches, pull requests, and manual triggers
+2. **Test Phase**:
+   - Sets up PostgreSQL 16 service for realistic testing
+   - Installs dependencies and runs pytest test suite
+   - Verifies application health and basic functionality
+3. **Build & Publish Phase** (only on successful tests and pushes to main branch):
+   - Sets up Node.js 24 (to avoid deprecation warnings)
+   - Uses Docker Buildx for efficient image building
+   - Authenticates to Docker Hub using secrets
+   - Builds and pushes Docker image with two tags:
+     - `fmb237/netops-hub:latest`
+     - `fmb237/netops-hub:<commit-sha>`
+   - Includes proper OCI labels for traceability
+
+### To Use the CI/CD Pipeline:
+1. **Add Required Secrets** to your GitHub repository:
+   - Go to Settings → Secrets and variables → Actions
+   - Add:
+     - `DOCKER_USERNAME`: Your Docker Hub ID (e.g., `fmb237`)
+     - `DOCKER_PASSWORD`: Your Docker Hub **Access Token** (NOT password if 2FA enabled)
+       - Get token at: Docker Hub → Profile → Security → Access Tokens → New Access Token
+       - Set permissions: read, write, delete
+       - Name it: `github-actions-netops`
+
+2. **Trigger Pipeline**:
+   - Push to main/develop branches
+   - Create/open pull requests targeting main/develop
+   - Manually trigger from Actions tab
+
+3. **Monitor Results**:
+   - View workflow runs in the Actions tab
+   - Check test results and build logs
+   - Verify successful Docker image pushes to Docker Hub
+
 ## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE] file for details.
 
 ## 👨‍💻 Author
 
