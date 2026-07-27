@@ -64,3 +64,10 @@ For  this project since i have Some portgres containers in my machine i will sim
 | 16   | GitHub Actions CI/CD            | ⏳      |
 | 17   | Kubernetes Deployment           | ⚪      |
 | 18   | Terraform Integration           | ⚪      |
+
+
+
+**Since we are now at Sprint 6 let try and do it steps by steps**
+Let Create our github action directory and start building our yaml file 
+Using the command mkdir -p .github/workflows && touch .github/workflows/ci-cd.yml For creating the files for viewing what we have do to mainly 
+Let start our main CI-CD Configurations 
