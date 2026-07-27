@@ -20,6 +20,20 @@ jobs:
   test:
     name: 🧪 Run Tests
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: netops_admin
+          POSTGRES_PASSWORD: netops_password
+          POSTGRES_DB: netops_hub
+        ports: [5432:5432]
+        # Set health checks to wait until postgres is ready
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: 📥 Checkout Repository
@@ -38,8 +52,10 @@ jobs:
           pip install pytest
 
       - name: 🔬 Run Tests
+        env:
+          DATABASE_URL: postgresql://netops_admin:netops_password@localhost:5432/netops_hub
         run: |
-          PYTHONPATH=$GITHUB_WORKSPACE:$PYTHONPATH pytest tests/ -v --tb=short
+          pytest tests/ -v --tb=short
 
   # ==============================================
   # JOB 2: Build and Push Docker Image
