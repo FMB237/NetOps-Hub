@@ -39,7 +39,7 @@ jobs:
 
       - name: 🔬 Run Tests
         run: |
-          pytest tests/ -v --tb=short
+          PYTHONPATH=$GITHUB_WORKSPACE:$PYTHONPATH pytest tests/ -v --tb=short
 
   # ==============================================
   # JOB 2: Build and Push Docker Image
