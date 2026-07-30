@@ -7,7 +7,8 @@ from fastapi import HTTPException
 
 from app.database.database import get_db
 from app.services.device_service import device_service
-from app.models.enums import Vendor, DeviceType
+from app.services.activity_service import activity_service
+from app.models.enums import Vendor, DeviceType, ActivityType, ActivityLevel
 from app.schemas.device import DeviceCreate,DeviceUpdate
 
 router = APIRouter()
@@ -71,7 +72,7 @@ def create_device_form(
     )
 
 
-    # adding the post request 
+    # adding the post request
 @router.post("/devices/create")
 def create_device(
     hostname: str = Form(...),
@@ -82,6 +83,7 @@ def create_device(
     operating_system: str = Form(...),
     ssh_port: int = Form(22),
     username: str | None = Form(None),
+    password: str | None = Form(None),
     location: str | None = Form(None),
     notes: str | None = Form(None),
     db: Session = Depends(get_db),
@@ -95,11 +97,23 @@ def create_device(
         operating_system=operating_system,
         ssh_port=ssh_port,
         username=username,
+        password=password,
         location=location,
         notes=notes,
     )
 
-    device_service.create_device(db, device)
+    new_device = device_service.create_device(db, device)
+
+    # Log the activity
+    activity_service.log_activity(
+        db=db,
+        activity_type=ActivityType.DEVICE_CREATED,
+        message=f"Device '{hostname}' created with IP {ip_address}",
+        level=ActivityLevel.INFO,
+        device_id=new_device.id,
+        device_hostname=hostname,
+        ip_address="127.0.0.1",
+    )
 
     return RedirectResponse(
         url="/devices",
@@ -133,7 +147,7 @@ def edit_device_form(
         },
     )
 
-# let add a post request for editing 
+# let add a post request for editing
 @router.post("/devices/{device_id}/edit")
 def update_device(
     device_id: UUID,
@@ -145,6 +159,7 @@ def update_device(
     operating_system: str = Form(...),
     ssh_port: int = Form(22),
     username: str | None = Form(None),
+    password: str | None = Form(None),
     location: str | None = Form(None),
     notes: str | None = Form(None),
     db: Session = Depends(get_db),
@@ -159,6 +174,7 @@ def update_device(
         operating_system=operating_system,
         ssh_port=ssh_port,
         username=username,
+        password=password,
         location=location,
         notes=notes,
     )
@@ -167,6 +183,17 @@ def update_device(
         db,
         device_id,
         device,
+    )
+
+    # Log the activity
+    activity_service.log_activity(
+        db=db,
+        activity_type=ActivityType.DEVICE_UPDATED,
+        message=f"Device '{hostname}' updated",
+        level=ActivityLevel.INFO,
+        device_id=device_id,
+        device_hostname=hostname,
+        ip_address="127.0.0.1",
     )
 
     return RedirectResponse(
@@ -181,10 +208,24 @@ def delete_device(
     device_id: UUID,
     db: Session = Depends(get_db),
 ):
+    # Get device info before deleting
+    device = device_service.get_device(db, device_id)
+    hostname = device.hostname if device else "Unknown"
 
     device_service.delete_device(
         db,
         device_id,
+    )
+
+    # Log the activity
+    activity_service.log_activity(
+        db=db,
+        activity_type=ActivityType.DEVICE_DELETED,
+        message=f"Device '{hostname}' deleted",
+        level=ActivityLevel.INFO,
+        device_id=device_id,
+        device_hostname=hostname,
+        ip_address="127.0.0.1",
     )
 
     return RedirectResponse(

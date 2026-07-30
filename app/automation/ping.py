@@ -1,19 +1,22 @@
-# Network service checker devices
-
-import socket
-import time
+# Ping automation module
 import subprocess
 import platform
+import time
 
-import paramiko
 
-
-class NetworkService:
+class PingAutomation:
+    """Handle ping operations for network devices."""
 
     def ping(self, ip_address: str, count: int = 4):
         """
         Ping a device to check if it's reachable.
-        Returns ping statistics including packet loss and response time.
+
+        Args:
+            ip_address: The IP address to ping
+            count: Number of ping packets to send
+
+        Returns:
+            dict: Ping results including reachable status, latency, packet loss
         """
         param = "-n" if platform.system().lower() == "windows" else "-c"
         command = ["ping", param, str(count), ip_address]
@@ -26,7 +29,7 @@ class NetworkService:
                 universal_newlines=True,
                 timeout=10
             )
-            latency = round((time.time() - start) * 1000, 2)
+            total_latency = round((time.time() - start) * 1000, 2)
 
             # Parse output for packet loss
             if "0% packet loss" in output.lower():
@@ -38,11 +41,12 @@ class NetworkService:
                         avg_time = float(avg_line.split('=')[1].split('ms')[0].strip())
                         avg_latency = round(avg_time, 2)
                     else:
-                        avg_latency = round(latency / count, 2)
+                        avg_latency = round(total_latency / count, 2)
                 except:
-                    avg_latency = round(latency / count, 2)
+                    avg_latency = round(total_latency / count, 2)
 
                 return {
+                    "success": True,
                     "reachable": True,
                     "packet_loss": packet_loss,
                     "latency": f"{avg_latency} ms",
@@ -66,6 +70,7 @@ class NetworkService:
                     packet_loss = 100
 
                 return {
+                    "success": True,
                     "reachable": False,
                     "packet_loss": packet_loss,
                     "latency": None,
@@ -75,6 +80,7 @@ class NetworkService:
 
         except subprocess.TimeoutExpired:
             return {
+                "success": False,
                 "reachable": False,
                 "packet_loss": 100,
                 "latency": None,
@@ -83,6 +89,7 @@ class NetworkService:
             }
         except Exception as e:
             return {
+                "success": False,
                 "reachable": False,
                 "packet_loss": 100,
                 "latency": None,
@@ -90,67 +97,22 @@ class NetworkService:
                 "raw_output": None,
             }
 
-    def test_connection(
-        self,
-        ip,
-        port,
-        username,
-        password,
-    ):
+    def ping_multiple(self, ip_addresses: list[str], count: int = 4):
         """
-        Test SSH connection to a device.
-        Returns connection status, latency, and device hostname.
+        Ping multiple devices.
+
+        Args:
+            ip_addresses: List of IP addresses to ping
+            count: Number of ping packets per device
+
+        Returns:
+            dict: Results for each IP address
         """
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-
-        start = time.time()
-
-        try:
-            ssh.connect(
-                hostname=ip,
-                port=port,
-                username=username,
-                password=password,
-                timeout=5,
-                banner_timeout=5,
-                auth_timeout=5,
-            )
-
-            latency = round((time.time() - start) * 1000, 2)
-
-            stdin, stdout, stderr = ssh.exec_command("hostname")
-            hostname = stdout.read().decode().strip()
-
-            ssh.close()
-
-            return {
-                "reachable": True,
-                "port_open": True,
-                "latency": f"{latency} ms",
-                "message": "SSH connection successful",
-                "hostname": hostname,
-            }
-        except Exception as e:
-            return {
-                "reachable": False,
-                "port_open": False,
-                "latency": None,
-                "message": str(e),
-                "hostname": None,
-            }
-
-    def check_port(self, ip: str, port: int):
-        """
-        Check if a specific port is open on a device.
-        """
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.settimeout(2)
-        start = time.time()
-        result = sock.connect_ex((ip, port))
-        latency = round((time.time() - start) * 1000, 2)
-        sock.close()
-        return result == 0, latency
+        results = {}
+        for ip in ip_addresses:
+            results[ip] = self.ping(ip, count)
+        return results
 
 
-network_service = NetworkService()
+# Create singleton instance
+ping_automation = PingAutomation()

@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Configuration Backups{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+                <i class="bi bi-folder-save text-primary"></i>
+                Configuration Backups
+            </h2>
+
+            <p class="text-muted">
+                View and manage device configuration backups
+            </p>
+
+        </div>
+
+    </div>
+
+    {% if backups|length == 0 %}
+    <div class="card shadow-sm">
+        <div class="card-body text-center py-5">
+            <i class="bi bi-folder fs-1 text-muted"></i>
+            <h5 class="mt-3">No Backups Yet</h5>
+            <p class="text-muted">Go to a device and create a backup to see it here.</p>
+        </div>
+    </div>
+    {% else %}
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Filename</th>
+                            <th>Device</th>
+                            <th>Date</th>
+                            <th>Size</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for backup in backups %}
+                        <tr>
+                            <td>
+                                <i class="bi bi-file-earmark-text text-primary"></i>
+                                {{ backup.filename }}
+                            </td>
+                            <td>{{ backup.filename.split('_')[0] }}</td>
+                            <td>{{ backup.modified }}</td>
+                            <td>{{ (backup.size / 1024)|round(2) }} KB</td>
+                            <td>
+                                <button class="btn btn-sm btn-info" onclick="viewBackup('{{ backup.filename }}')">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+
+<!-- Backup View Modal -->
+<div class="modal fade" id="backupModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Backup Content</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <pre id="backupContent" class="bg-dark text-light p-3" style="white-space: pre-wrap; word-wrap: break-word; max-height: 500px; overflow-y: auto;"></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+async function viewBackup(filename) {
+    try {
+        const response = await fetch(`/api/network/backups/${filename}`);
+        const data = await response.json();
+
+        document.getElementById('backupContent').textContent = data.content;
+        new bootstrap.Modal(document.getElementById('backupModal')).show();
+    } catch (error) {
+        alert('Error loading backup: ' + error.message);
+    }
+}
+</script>
+
+{% endblock %}

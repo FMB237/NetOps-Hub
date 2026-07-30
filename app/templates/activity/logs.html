@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block title %}Activity Log{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+                <i class="bi bi-clock-history text-primary"></i>
+                Activity Log
+            </h2>
+
+            <p class="text-muted">
+                View all system and device activities
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- Filters -->
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body">
+
+            <form method="GET" action="/activities" class="row g-3">
+
+                <div class="col-lg-4">
+
+                    <select class="form-select" name="activity_type">
+
+                        <option value="">All Activity Types</option>
+
+                        {% for at in activity_types %}
+                        <option value="{{ at.value }}" {% if selected_type == at %}selected{% endif %}>
+                            {{ at.value }}
+                        </option>
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+                <div class="col-lg-3">
+
+                    <select class="form-select" name="level">
+
+                        <option value="">All Levels</option>
+
+                        {% for lvl in levels %}
+                        <option value="{{ lvl.value }}" {% if selected_level == lvl %}selected{% endif %}>
+                            {{ lvl.value }}
+                        </option>
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+                <div class="col-lg-2 d-grid">
+
+                    <button class="btn btn-primary" type="submit">
+                        <i class="bi bi-filter"></i>
+                        Filter
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- Activity List -->
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body">
+
+            {% if activities|length == 0 %}
+            <div class="text-center py-5">
+                <i class="bi bi-clock-history fs-1 text-muted"></i>
+                <h5 class="mt-3">No Activities Found</h5>
+                <p class="text-muted">Activities will appear here when you perform actions.</p>
+            </div>
+            {% else %}
+            <div class="table-responsive">
+
+                <table class="table table-hover">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Time</th>
+                            <th>Level</th>
+                            <th>Type</th>
+                            <th>Message</th>
+                            <th>Device</th>
+                            <th>IP Address</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for activity in activities %}
+                        <tr>
+
+                            <td>
+                                <small>{{ activity.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+                            </td>
+
+                            <td>
+                                {% if activity.level.value == 'INFO' %}
+                                <span class="badge bg-info">INFO</span>
+                                {% elif activity.level.value == 'WARNING' %}
+                                <span class="badge bg-warning">WARNING</span>
+                                {% elif activity.level.value == 'ERROR' %}
+                                <span class="badge bg-danger">ERROR</span>
+                                {% elif activity.level.value == 'DEBUG' %}
+                                <span class="badge bg-secondary">DEBUG</span>
+                                {% else %}
+                                <span class="badge bg-primary">{{ activity.level.value }}</span>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <small>{{ activity.activity_type.value }}</small>
+                            </td>
+
+                            <td>{{ activity.message }}</td>
+
+                            <td>
+                                {% if activity.device_hostname %}
+                                <a href="/devices/{{ activity.device_id }}">{{ activity.device_hostname }}</a>
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <small>{{ activity.ip_address or '-' }}</small>
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

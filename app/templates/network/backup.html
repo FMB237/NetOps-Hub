@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}
+Backup Configuration - {{ device.hostname }}
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+                <i class="bi bi-save text-primary me-2"></i>
+                Backup Configuration
+            </h2>
+
+            <p class="text-muted">
+                Backup running configuration from {{ device.hostname }} ({{ device.ip_address }})
+            </p>
+
+        </div>
+
+        <a href="/devices/{{ device.id }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i>
+            Back to Device
+        </a>
+
+    </div>
+
+    {% if error %}
+    <div class="alert alert-danger">
+        <i class="bi bi-exclamation-triangle"></i>
+        {{ error }}
+    </div>
+    {% endif %}
+
+    {% if success %}
+    <div class="alert alert-success">
+        <h5><i class="bi bi-check-circle"></i> Backup Successful!</h5>
+        <p><strong>Device:</strong> {{ backup.device_hostname }}</p>
+        <p><strong>IP:</strong> {{ backup.ip_address }}</p>
+        <p><strong>File:</strong> {{ backup.filename }}</p>
+        <p><strong>Size:</strong> {{ backup.file_size }} bytes</p>
+        <p><strong>Timestamp:</strong> {{ backup.timestamp }}</p>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-save me-2"></i>
+                        Create New Backup
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label class="form-label">Device</label>
+                            <input type="text" class="form-control" value="{{ device.hostname }} ({{ device.ip_address }})" readonly>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">SSH Port</label>
+                            <input type="text" class="form-control" value="{{ device.ssh_port }}" readonly>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">SSH Username</label>
+                            <input type="text" class="form-control" value="{{ device.username or 'Not set' }}" readonly>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                SSH Password
+                                {% if has_password %}
+                                <span class="badge bg-success">Stored</span>
+                                {% endif %}
+                            </label>
+                            <input type="password" class="form-control" name="password" placeholder="{% if has_password %}Leave empty to use stored password{% else %}Enter SSH password{% endif %}">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i>
+                            Create Backup
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-info-circle me-2"></i>
+                        Backup Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p>Backups are saved to: <code>app/backups/</code></p>
+                    <p>Filename format: <code>&lt;hostname&gt;_&lt;timestamp&gt;.cfg</code></p>
+                    <hr>
+                    <h6>What gets backed up:</h6>
+                    <ul>
+                        <li>Running configuration</li>
+                        <li>Interface configurations</li>
+                        <li>VLAN settings</li>
+                        <li>Routing configurations</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
