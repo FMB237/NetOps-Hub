@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netops-hub
+  namespace: netops-hub
+  labels:
+    app: netops-hub
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: netops-hub
+  template:
+    metadata:
+      labels:
+        app: netops-hub
+    spec:
+      containers:
+      - name: netops-hub
+        image: fmb237/netops-hub:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: netops-hub-secrets
+              key: database-url
+        - name: APP_NAME
+          value: "NetOps-Hub"
+        - name: DEBUG
+          value: "False"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 15
+          periodSeconds: 20
