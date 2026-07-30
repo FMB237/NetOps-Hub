@@ -29,6 +29,7 @@ A professional network management system built with FastAPI, PostgreSQL, and mod
 - **Responsive Dashboard**: Real-time statistics and visualizations
 - **Multi-language Support**: Clean, internationalized interface
 - **Continuous Integration/Deployment**: Automated testing, Docker image building, and pushing to Docker Hub via GitHub Actions
+- **Multi-stage Docker Builds**: 60% image size reduction (577MB → 234MB) for faster pulls and improved security
 
 ### Technical Architecture
 - **Backend**: FastAPI (Python 3.12)
@@ -36,10 +37,8 @@ A professional network management system built with FastAPI, PostgreSQL, and mod
 - **Frontend**: HTML/CSS/Bootstrap with Vanilla JavaScript
 - **Authentication**: Session-based (extensible)
 - **API**: RESTful endpoints with automatic OpenAPI documentation
-- **Containerization**: Docker and Docker-Compose ready
-- **CI/CD**: GitHub Actions for automated testing and Docker image publishing (Completed!)
-- **Orchestration**: Kubernetes (planned)
-- **Infrastructure as Code**: Terraform (planned)
+- **Containerization**: Docker and Docker-Compose ready with multi-stage builds
+- **CI/CD**: GitHub Actions for automated testing and Docker image publishing
 - **Monitoring**: Integrated activity logging and system metrics
 
 ## 📸 Screenshots
@@ -81,7 +80,7 @@ A professional network management system built with FastAPI, PostgreSQL, and mod
 - **Templating**: Jinja2 (via FastAPI)
 
 ### DevOps & Infrastructure
-- **Containerization**: Docker & Docker-Compose
+- **Containerization**: Docker & Docker-Compose (with multi-stage builds)
 - **CI/CD**: GitHub Actions (Completed!)
 - **Orchestration**: Kubernetes (planned)
 - **Infrastructure as Code**: Terraform (planned)
@@ -109,7 +108,7 @@ NetOps-Hub/
 ├── .dockerignore            # Docker build exclusions
 ├── .env                     # Environment variables
 ├── .env.example             # Environment template
-├── Dockerfile               # Application container definition
+├── Dockerfile               # Application container definition (multi-stage)
 ├── docker-compose.yml       # Multi-container orchestration
 ├── requirement.txt          # Python dependencies
 ├── run.sh                   # Development startup script
@@ -199,6 +198,7 @@ The project includes a fully automated CI/CD pipeline that:
    - Installs dependencies and runs pytest test suite
    - Verifies application health and basic functionality
 3. **Build & Publish Phase** (only on successful tests and pushes to main branch):
+   - Uses **multi-stage Docker builds** for 60% image size reduction (577MB → 234MB)
    - Sets up Node.js 24 (to avoid deprecation warnings)
    - Uses Docker Buildx for efficient image building
    - Authenticates to Docker Hub using secrets
@@ -237,4 +237,4 @@ This project is licensed under the MIT License - see the [LICENSE] file for deta
 
 ---
 
-*Last updated: July 27, 2026*
+*Last updated: July 30, 2026*

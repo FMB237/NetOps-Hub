@@ -1,25 +1,38 @@
-# Use python:3.12-slim as base image
-FROM python:3.12-slim
+# Build stage
+FROM python:3.12-slim as builder
 
-# Set working directory
-WORKDIR /app
-
-# Install system dependencies
+# Install system dependencies for building
 RUN apt-get update && apt-get install -y \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first to leverage Docker cache
-COPY requirements.txt .
+WORKDIR /app
 
 # Install Python dependencies
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 COPY . .
 
+# Runtime stage
+FROM python:3.12-slim
+
 # Create non-root user for security
 RUN adduser --disabled-password --gecos '' appuser
+
+WORKDIR /app
+
+# Copy installed packages from builder stage
+COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
+
+# Copy application code
+COPY . .
+
+# Change ownership of application files to appuser
+RUN chown -R appuser:appuser /app
+
 USER appuser
 
 # Expose port
