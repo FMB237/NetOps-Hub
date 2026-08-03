@@ -12,7 +12,7 @@ A professional network management system built with FastAPI, PostgreSQL, and mod
 | **Sprint 4** | Configuration Backup & Activity Logging | ✅ Completed |
 | **Sprint 5** | Dockerization | ✅ Completed |
 | **Sprint 6** | GitHub Actions CI/CD Pipeline | ✅ Completed |
-| **Sprint 7** | Kubernetes Deployment | ⚪ Not Started |
+| **Sprint 7** | Kubernetes Deployment | ✅ Completed |
 | **Sprint 8** | Terraform Integration | ⚪ Not Started |
 
 ## ✨ Features Implemented
@@ -82,7 +82,7 @@ A professional network management system built with FastAPI, PostgreSQL, and mod
 ### DevOps & Infrastructure
 - **Containerization**: Docker & Docker-Compose (with multi-stage builds)
 - **CI/CD**: GitHub Actions (Completed!)
-- **Orchestration**: Kubernetes (planned)
+- **Orchestration**: Kubernetes (Successfully deployed via Kind)
 - **Infrastructure as Code**: Terraform (planned)
 
 ## 📂 Project Structure
