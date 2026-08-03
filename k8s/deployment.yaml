@@ -26,6 +26,10 @@ spec:
             secretKeyRef:
               name: netops-hub-secrets
               key: database-url
+        - name: POSTGRES_HOST
+          value: "postgres"
+        - name: POSTGRES_PORT
+          value: "5434"
         - name: APP_NAME
           value: "NetOps-Hub"
         - name: DEBUG
